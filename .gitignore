@@ -4,3 +4,6 @@
 *.jar
 *.war
 *.ear
+/src/ParticleSwarmOptimization/nbproject/private/
+/src/ParticleSwarmOptimization/build/
+/src/nbproject/private/
