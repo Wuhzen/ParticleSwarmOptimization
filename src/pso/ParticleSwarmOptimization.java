@@ -41,7 +41,6 @@ public class ParticleSwarmOptimization {
 
 	public static void usage(String progname) {
 		System.out.println("Usage: " + progname + " CONFIG_FILE");
-		System.out
-				.println("Solves problem using particle swarm optimalization.");
+		System.out.println("Solves problem using particle swarm optimalization.");
 	}
 }
