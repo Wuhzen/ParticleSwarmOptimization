@@ -27,8 +27,8 @@ public class Particle {
 		this.c1 = c1;
 		this.c2 = c2;
 		this.w = w;
-		velocity = getRandomList(dimension);
-		position = getRandomList(dimension);
+		velocity = getRandomList(dimension, -1, 1);
+		position = getRandomList(dimension, -100, 100);
 		bestParticlePosition = new ArrayList<Double>(position);
 	}
 	
@@ -127,10 +127,10 @@ public class Particle {
 		return (high - low) * Math.random() + low;
 	}
 
-	public static ArrayList<Double> getRandomList(int size) {
+	public static ArrayList<Double> getRandomList(int size, double low, double high) {
 		ArrayList<Double> retval = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
-			retval.add(getRandomNumber(0, 100)); // TODO
+			retval.add(getRandomNumber(low, high));
 		}
 		return retval;
 	}
