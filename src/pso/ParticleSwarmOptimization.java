@@ -27,8 +27,9 @@ public class ParticleSwarmOptimization {
 			@Override
 			public double get(ArrayList<Double> vector) {
 				double sum = 0;
-				for (Double value : vector)
+				for (Double value : vector) {
 					sum += value * value;
+				}
 				return sum;
 			}
 		};
@@ -36,11 +37,12 @@ public class ParticleSwarmOptimization {
 		new Solver(ff, config.maxIterations, config.dimension, config.epsilon,
 				config.rounds, config.inertiaWeightStart,
 				config.inertiaWeightEnd, config.connections, config.c1,
-				config.c2);
+				config.c2).solve();
 	}
 
 	public static void usage(String progname) {
 		System.out.println("Usage: " + progname + " CONFIG_FILE");
 		System.out.println("Solves problem using particle swarm optimalization.");
 	}
+	
 }
