@@ -15,6 +15,7 @@ public class Solver {
 	private ArrayList<Particle> particles = new ArrayList<Particle>();
 	private double c2;
 	private double c1;
+	private int step;
 
 	public Solver(FitnessFunction fitness, int maxIterations, int dimension,
 			double epsilon, int rounds, double inertiaWeightStart,
@@ -33,32 +34,50 @@ public class Solver {
 		int particleCount = 10 + (int) (2 * Math.sqrt(dimension));
 
 		for (int i = 0; i < particleCount; i++)
-			particles.add(new Particle(fitness, dimension, c1, c2, inertiaWeightStart));
+			particles.add(new Particle(fitness, dimension, c1, c2,
+					inertiaWeightStart));
 
 		// find the best global position and set it to all of them
 		setBestGlobalPosition(getBestGlobalPosition());
 	}
 
-	public void solve() {
-		for (int i = 0; i < maxIterations; i++) {
-			step(i);
-			 
-			double fitnessValue = fitness.get(getBestGlobalPosition()); 
+	public int solve() {
+		for (int step = 0; step < maxIterations; step++) {
+			doStep();
+
+			double fitnessValue = fitness.get(getBestGlobalPosition());
 			if (fitnessValue < epsilon) {
-				System.out.println("Found solution with evaluatiation " + fitnessValue);
-				return;
+				System.out.println("Found solution with evaluatiation "
+						+ fitnessValue);
+				return step + 1;
 			}
 		}
+		return maxIterations;
 	}
 
-	private void step(int step) {
-		updateParticlesVelocity();
-		updateParticlesPosition();
+	private void doStep() {
+		updateParticles();
 
 		// find the best global position and set it to all of them
 		setBestGlobalPosition(getBestGlobalPosition());
 		System.out.println("=== Step " + (step + 1) + " ===");
+		System.out.println("Best solution is with fitness value "
+				+ fitness.get(getBestGlobalPosition()));
 		printParticlesData();
+	}
+
+	private void updateParticles() {
+		updateParticlesVelocity();
+		updateParticlesPosition();
+		updateParticlesInertia();
+	}
+
+	private void updateParticlesInertia() {
+		double inertiaStep = (inertiaWeightStart - inertiaWeightEnd)
+				/ maxIterations;
+
+		Particle.setW(Particle.getW() - inertiaStep);
+
 	}
 
 	private void printParticlesData() {

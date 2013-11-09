@@ -1,6 +1,7 @@
 package pso;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Particle {
 
@@ -12,6 +13,7 @@ public class Particle {
 	private static double c2;
 	private static double w;
 	private static FitnessFunction fitness;
+	private static Random randomGenerator = new Random();
 
 	/**
 	 * Be sure to set bestGlobalPosition after this call before updating
@@ -32,16 +34,16 @@ public class Particle {
 		bestParticlePosition = new ArrayList<Double>(position);
 	}
 	
-	public void setBestGlobalPosition(ArrayList<Double> p) {
-		bestGlobalPosition = p;
+	public void setBestGlobalPosition(final ArrayList<Double> p) {
+		bestGlobalPosition = new ArrayList<Double>(p);
 	}
 
 	
-	public ArrayList<Double> getBestParticlePosition() {
+	public final ArrayList<Double> getBestParticlePosition() {
 		return bestParticlePosition;
 	}
 
-	public ArrayList<Double> getBestGlobalPosition() {
+	public final ArrayList<Double> getBestGlobalPosition() {
 		return bestGlobalPosition;
 	}
 
@@ -67,6 +69,7 @@ public class Particle {
 	 */
 	public void updatePosition() {
 		position = sumLists(position, velocity);
+		
 		if (fitness.get(position) < fitness.get(bestParticlePosition)) {
 			bestParticlePosition = position;
 		}
@@ -77,8 +80,8 @@ public class Particle {
 	 * c2 * r2 * (bestGlobalPosition(t) - position(t))
 	 */
 	public void updateVelocity() {
-		double r1 = Math.random();
-		double r2 = Math.random();
+		double r1 = getRandomNumber(0, 1);
+		double r2 = getRandomNumber(0, 1);
 
 		ArrayList<Double> pTxT = subtractLists(bestParticlePosition, position);
 		ArrayList<Double> gTxT = subtractLists(bestGlobalPosition, position);
@@ -89,7 +92,7 @@ public class Particle {
 		ArrayList<Double> vTc1r1pTxT = sumLists(velocity, c1r1pTxT);
 		ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT, c2r2pTxT);
 
-		velocity = vTc1r1pTxTc2r2pTxT;
+		velocity = multiplyList(w, vTc1r1pTxTc2r2pTxT);
 	}
 
 	public static ArrayList<Double> subtractLists(final ArrayList<Double> a,
@@ -124,7 +127,7 @@ public class Particle {
 	}
 
 	public static double getRandomNumber(double low, double high) {
-		return (high - low) * Math.random() + low;
+		return (high - low) * randomGenerator.nextDouble() + low;
 	}
 
 	public static ArrayList<Double> getRandomList(int size, double low, double high) {
