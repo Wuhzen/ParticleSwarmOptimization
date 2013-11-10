@@ -14,6 +14,8 @@ public class Particle {
 	private static double w;
 	private static FitnessFunction fitness;
 	private static Random randomGenerator = new Random();
+	private static double clampMin = -100;
+	private static double clampMax =  100;
 
 	/**
 	 * Be sure to set bestGlobalPosition after this call before updating
@@ -24,12 +26,8 @@ public class Particle {
 	 * @param c2
 	 * @param w
 	 */
-	public Particle(FitnessFunction fitness, int dimension, double c1, double c2, double w) {
-		this.fitness = fitness;
-		this.c1 = c1;
-		this.c2 = c2;
-		this.w = w;
-		velocity = getRandomList(dimension, -1, 1);
+	public Particle(int dimension) {
+		velocity = getRandomList(dimension, -10, 10);
 		position = getRandomList(dimension, -100, 100);
 		bestParticlePosition = new ArrayList<Double>(position);
 	}
@@ -76,8 +74,8 @@ public class Particle {
 	}
 
 	/**
-	 * velocity(t+1) = velocity(t) + c1 * r1 * (bestPosition(t) - position(t)) +
-	 * c2 * r2 * (bestGlobalPosition(t) - position(t))
+	 * velocity(t+1) = w*(velocity(t) + c1 * r1 * (bestPosition(t) - position(t)) +
+	 * c2 * r2 * (bestGlobalPosition(t) - position(t)))
 	 */
 	public void updateVelocity() {
 		double r1 = getRandomNumber(0, 1);
@@ -93,6 +91,13 @@ public class Particle {
 		ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT, c2r2pTxT);
 
 		velocity = multiplyList(w, vTc1r1pTxTc2r2pTxT);
+	}
+	
+	private void clampVelocity(ArrayList<Double> velocity) {
+		for (int i = 0; i < velocity.size(); i++) {
+			//double newVelocity = ()
+			//velocity.set(i, )
+		}
 	}
 
 	public static ArrayList<Double> subtractLists(final ArrayList<Double> a,
@@ -145,5 +150,21 @@ public class Particle {
 		System.out.println("\tbestParticlePosition = " + bestParticlePosition);
 		System.out.println("\tbestGlobalPosition = " + bestGlobalPosition);
 		
+	}
+
+	public static void setC1(double arg) {
+		c1 = arg;
+	}
+
+	public static void setC2(double arg) {
+		c2 = arg;
+	}
+
+	public ArrayList<Double> getPosition() {
+		return position;
+	}
+
+	public static void setFitness(FitnessFunction arg) {
+		fitness = arg;
 	}
 }

@@ -1,0 +1,8 @@
+problem              = circle
+dimension            = 1
+rounds               = 10
+max_iterations       = 1000
+epsilon              = 0.001
+connections          = -1
+inertia_weight_start = 1.0
+inertia_weight_end   = 1.0
