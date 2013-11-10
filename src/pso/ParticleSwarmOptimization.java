@@ -35,7 +35,7 @@ public class ParticleSwarmOptimization {
 		};
 
 		new Solver(ff, config.maxIterations, config.dimension, config.epsilon,
-				config.rounds, config.inertiaWeightStart,
+				config.inertiaWeightStart,
 				config.inertiaWeightEnd, config.connections, config.c1,
 				config.c2).solve();
 	}

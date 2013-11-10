@@ -7,7 +7,6 @@ import java.util.Properties;
 public class Configuration {
 	public String problem;
 	public int dimension;
-	public int rounds;
 	public int maxIterations;
 	public double epsilon;
 	public int connections;
@@ -28,8 +27,7 @@ public class Configuration {
 
 	private void setValues(Properties defaultProps) throws NoSuchFieldException {
 		problem = parseString("problem");
-		dimension = parseInt("dimension");
-		rounds = parseInt("rounds");
+		dimension = parseInt("dimension");		
 		maxIterations = parseInt("max_iterations");
 		epsilon = parseDouble("epsilon");
 		connections = parseInt("connections");
