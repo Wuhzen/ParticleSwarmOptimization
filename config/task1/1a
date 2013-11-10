@@ -1,10 +1,10 @@
 problem              = circle
-dimension            = 2
+dimension            = 1
 rounds               = 1
 max_iterations       = 1000
 epsilon              = 0.001
-connections          = 3
+connections          = -1
 inertia_weight_start = 1.0
 inertia_weight_end   = 1.0
-c1                   = 1.5
-c2                   = 0.5
+c1                   = 1.999
+c2                   = 1.999

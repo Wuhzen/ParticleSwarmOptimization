@@ -14,8 +14,12 @@ public class Particle {
 	private static double w;
 	private static FitnessFunction fitness;
 	private static Random randomGenerator = new Random();
-	private static double clampMin = -100;
-	private static double clampMax =  100;
+	
+	private static double positionMin = -100;
+	private static double positionMax =  100;
+	
+	private static double clampMin = positionMin/2;
+	private static double clampMax = positionMax/2;
 
 	/**
 	 * Be sure to set bestGlobalPosition after this call before updating
@@ -27,8 +31,10 @@ public class Particle {
 	 * @param w
 	 */
 	public Particle(int dimension) {
-		velocity = getRandomList(dimension, -10, 10);
-		position = getRandomList(dimension, -100, 100);
+		velocity = new ArrayList<>();
+		for (int i = 0; i < dimension; i++) // starting velocity is zero
+			velocity.add(0.0);
+		position = getRandomList(dimension, positionMin, positionMax);
 		bestParticlePosition = new ArrayList<Double>(position);
 	}
 	
@@ -91,12 +97,15 @@ public class Particle {
 		ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT, c2r2pTxT);
 
 		velocity = multiplyList(w, vTc1r1pTxTc2r2pTxT);
+		clampVelocity(velocity);
 	}
 	
 	private void clampVelocity(ArrayList<Double> velocity) {
 		for (int i = 0; i < velocity.size(); i++) {
-			//double newVelocity = ()
-			//velocity.set(i, )
+			if (velocity.get(i) < clampMin)
+				velocity.set(i, clampMin);
+			else if (velocity.get(i) > clampMax)
+				velocity.set(i, clampMax);
 		}
 	}
 

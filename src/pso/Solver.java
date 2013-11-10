@@ -98,19 +98,10 @@ public class Solver {
 						particles);
 				Collections.sort(possibleNeighbours,
 						new ParticleDistanceComparator(p));
-				possibleNeighbours = new ArrayList<>(possibleNeighbours.subList(0, connections));
 				// pick connections + 1 closest particles (+1 because the examined particle is also in the list
+				possibleNeighbours = new ArrayList<>(possibleNeighbours.subList(0, connections + 1));
 				p.setBestGlobalPosition(getBestGlobalPosition(possibleNeighbours));
 			}
-		}
-	}
-
-	class ParticleBestLocalPositionComparator implements Comparator<Particle> {
-
-		@Override
-		public int compare(Particle o1, Particle o2) {
-			return Double.compare(fitness.get(o1.getBestParticlePosition()),
-					fitness.get(o2.getBestParticlePosition()));
 		}
 	}
 
@@ -123,9 +114,9 @@ public class Solver {
 
 		private double getDistance(Particle p) {
 			double distance = 0; 
-			for (int i = 0; i < particle.getBestParticlePosition().size(); i++) {
-				distance += Math.pow(particle.getBestParticlePosition().get(i)
-						- p.getBestParticlePosition().get(i), 2);
+			for (int i = 0; i < particle.getPosition().size(); i++) {
+				distance += Math.pow(particle.getPosition().get(i)
+						- p.getPosition().get(i), 2);
 			}
 			return Math.sqrt(distance);
 		}
