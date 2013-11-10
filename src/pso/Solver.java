@@ -23,13 +23,12 @@ public class Solver {
 	double inertiaStep;
 
 	public Solver(FitnessFunction fitness, int maxIterations, int dimension,
-			double epsilon, int rounds, double inertiaWeightStart,
+			double epsilon, double inertiaWeightStart,
 			double inertiaWeightEnd, int connections, double c1, double c2) {
 		this.fitness = fitness;
 		this.maxIterations = maxIterations;
 		this.dimension = dimension;
 		this.epsilon = epsilon;
-		this.rounds = rounds;
 		this.inertiaWeightStart = inertiaWeightStart;
 		this.inertiaWeightEnd = inertiaWeightEnd;
 		this.inertiaStep = (inertiaWeightStart - inertiaWeightEnd)

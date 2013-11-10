@@ -35,15 +35,14 @@ public class ParticleSwarmOptimization {
 		};
 
 		new Solver(ff, config.maxIterations, config.dimension, config.epsilon,
-				config.rounds, config.inertiaWeightStart,
+				config.inertiaWeightStart,
 				config.inertiaWeightEnd, config.connections, config.c1,
 				config.c2).solve();
 	}
 
 	public static void usage(String progname) {
 		System.out.println("Usage: " + progname + " CONFIG_FILE");
-		System.out
-				.println("Solves problem using particle swarm optimalization.");
+		System.out.println("Solves problem using particle swarm optimalization.");
 	}
 	
 }
