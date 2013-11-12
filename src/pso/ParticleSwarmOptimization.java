@@ -15,8 +15,8 @@ public class ParticleSwarmOptimization {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ParticleSwarmOptimization.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
+    }   
+    
     /**
      * @param args the command line arguments
      */
@@ -34,15 +34,16 @@ public class ParticleSwarmOptimization {
             return;
         }
 
-        /* Creation of the factory */
+        /* Create the factory */
         FitnessFunctionFactory ffFactory = FitnessFunctionFactory.getInstance();
 
-        FitnessFunction ff = ffFactory.createFitnessFunction("circle");
+        /* Factory creates the product - fitness function */
+        FitnessFunction ff = ffFactory.createFitnessFunction(config.problem);
 
         new Solver(ff, config.maxIterations, config.dimension, config.epsilon,
                 config.inertiaWeightStart,
                 config.inertiaWeightEnd, config.connections, config.c1,
-                config.c2).solve();
+                config.c2, config.weightLimit, config.knapsackInputFile).solve();
     }
 
     public static void usage(String progname) {

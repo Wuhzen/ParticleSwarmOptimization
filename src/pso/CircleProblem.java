@@ -11,6 +11,13 @@ public class CircleProblem extends FitnessFunction {
         FitnessFunctionFactory.registerFitnessFunction("circle", new CircleProblem());
     }
     
+    private static final double particlePositionMin = -100;
+    private static final double particlePositionMax = 100;
+
+    public CircleProblem() {
+        super(particlePositionMin, particlePositionMax);
+    }        
+    
     /**
      * Implementation of fitness function.
      * @param vector Particle's position
