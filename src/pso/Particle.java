@@ -31,8 +31,8 @@ public class Particle {
     public Particle(int dimension, double positionMin, double positionMax) {
         this.positionMin = positionMin;
         this.positionMax = positionMax;
-        clampMin         = positionMin / 2;
-        clampMax         = positionMax / 2;
+        clampMin         = positionMin / 100;
+        clampMax         = positionMax / 100;
 
         velocity = new ArrayList<>();
         for (int i = 0; i < dimension; i++) // starting velocity is zero
