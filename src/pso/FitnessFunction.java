@@ -52,6 +52,14 @@ public abstract class FitnessFunction {
     public abstract ArrayList<Double> initParticlePosition(int dimension);
     
     /**
+     * Clamps particles position
+     * @param position
+     * @return 
+     */
+    public abstract ArrayList<Double> clampPosition(ArrayList<Double> position,
+                                                    ArrayList<Double> velocity);
+    
+    /**
      * Clamps particles velocity
      * @param velocity
      * @return 

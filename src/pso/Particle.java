@@ -6,7 +6,7 @@ import java.util.Random;
 public class Particle {
 
     private ArrayList<Double> position = new ArrayList<>();
-    private ArrayList<Double> velocity = new ArrayList<>();
+    private ArrayList<Double> velocity = new ArrayList<>();  
     private ArrayList<Double> bestParticlePosition = new ArrayList<>();
     private ArrayList<Double> bestGlobalPosition = new ArrayList<>();
     private static double c1;
@@ -64,13 +64,18 @@ public class Particle {
         Particle.w = w;
     }
 
+    public ArrayList<Double> getVelocity() {
+        return velocity;
+    }
+    
     /**
      * position(t+1) = position(t) + velocity(t+1). Be sure that you called
      * updateVelocity first!
      */
     public void updatePosition() {
         position = sumLists(position, velocity);
-
+        position = fitness.clampPosition(position, velocity);
+        
         if (fitness.get(position) < fitness.get(bestParticlePosition)) {
             bestParticlePosition = position;
         }

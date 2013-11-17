@@ -47,7 +47,10 @@ public class Solver {
             ((KnapsackProblem)fitness).parsePackagesFile(knapsackInputFile,
                     considerVolume);
             
-            ((KnapsackProblem)fitness).setWeightLimit(weightLimit);
+            // terrible hacks which I am ashamed for but no time to
+            // change factory pattern.
+            ((KnapsackProblem)fitness).setWeightLimit(weightLimit); 
+            ((KnapsackProblem)fitness).setMaxvalue();
         }
         
         // DEBUG

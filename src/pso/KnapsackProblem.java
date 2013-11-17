@@ -5,7 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
+import java.util.Random;
 import java.util.Scanner;
+import static pso.FitnessFunction.getRandomNumber;
+
 
 /**
  * This class implements the fitness function evaluating the knapsack problem.
@@ -22,6 +25,7 @@ public class KnapsackProblem extends FitnessFunction {
             CommonConstants.knapsackProblemClampVelocityMax;
     private ArrayList<Package> packages;
     private double weightLimit;
+    private double maxValue;
 
     public KnapsackProblem() {
         super(CommonConstants.knapsackProblemParticlePositionMin,
@@ -35,6 +39,16 @@ public class KnapsackProblem extends FitnessFunction {
     }
 
     /**
+     * Counts the total value of all packages and saves it
+     */
+    public void setMaxvalue() {        
+        maxValue = 0.0;
+        for(Package p: packages) {
+            maxValue += p.value;
+        }
+    }
+    
+    /**
      * Implementation of fitness function.
      *
      * @param vector particle's current position
@@ -47,7 +61,7 @@ public class KnapsackProblem extends FitnessFunction {
         if ((weightLimit - knapsackQuality(vector, Package.PackageAttributes.WEIGHT)) < 0.0) {
             fitness = Double.MAX_VALUE;
         } else {
-            fitness = Double.MAX_VALUE - knapsackQuality(vector, Package.PackageAttributes.VALUE);
+            fitness = maxValue - knapsackQuality(vector, Package.PackageAttributes.VALUE);
         }
 
         return fitness;
@@ -176,6 +190,19 @@ public class KnapsackProblem extends FitnessFunction {
     }
 
     @Override
+    public ArrayList<Double> clampPosition(ArrayList<Double> position, 
+                                           ArrayList<Double> velocity) {
+        double newPos;
+        
+        for(int i = 0; i < position.size(); i++) {
+            newPos = (getRandomNumber(0.0, 1.0) < velocity.get(i)) ? 1.0 : 0.0;
+            position.set(i, newPos);
+        }
+        
+        return position;
+    }
+    
+    @Override
     public ArrayList<Double> clampVelocity(ArrayList<Double> velocity) {
         int sign;
 
@@ -219,7 +246,6 @@ public class KnapsackProblem extends FitnessFunction {
         return sum;
     }
 }
-
 /**
  * Excpetion thrown if the file specifing the packages properties is empty.
  */

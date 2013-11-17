@@ -65,4 +65,11 @@ public class CircleProblem extends FitnessFunction {
                                  particlePostionMax);        
         return position;
     }
+
+    // Not neede here -> only returns the parameter it gets unchanged.
+    @Override
+    public ArrayList<Double> clampPosition(ArrayList<Double> position,
+                                           ArrayList<Double> velocity) {
+        return position;
+    }
 }
