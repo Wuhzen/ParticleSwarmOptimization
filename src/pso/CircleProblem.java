@@ -9,13 +9,16 @@ public class CircleProblem extends FitnessFunction {
     static {
         /* Registers itself in the factory. */
         FitnessFunctionFactory.registerFitnessFunction("circle", new CircleProblem());
-    }
-    
-    private static final double particlePositionMin = -100;
-    private static final double particlePositionMax = 100;
+    }        
+    private static final double clampMin = 
+            CommonConstants.circleProblemParticlePositionMin / 100;
+    private static final double clampMax = 
+            CommonConstants.circleProblemParticlePositionMax / 100;
 
     public CircleProblem() {
-        super(particlePositionMin, particlePositionMax);
+        super(CommonConstants.circleProblemParticlePositionMin,
+              CommonConstants.circleProblemParticlePositionMax,
+              clampMin, clampMax);
     }        
     
     /**
@@ -39,5 +42,27 @@ public class CircleProblem extends FitnessFunction {
     @Override
     public FitnessFunction createFitnessFunction() {
         return new CircleProblem();
+    }
+    
+    @Override
+    public ArrayList<Double> clampVelocity(ArrayList<Double> velocity) {
+        for (int i = 0; i < velocity.size(); i++) {
+            if (velocity.get(i) < clampMin) {
+                velocity.set(i, clampMin);
+            } else if (velocity.get(i) > clampMax) {
+                velocity.set(i, clampMax);
+            }
+        }
+        
+        return velocity;
+    }
+
+    @Override
+    public ArrayList<Double> initParticlePosition(int dimension) {
+        ArrayList<Double> position = new ArrayList<>();        
+        position = getRandomList(dimension, 
+                                 particlePostionMin, 
+                                 particlePostionMax);        
+        return position;
     }
 }

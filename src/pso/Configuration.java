@@ -16,6 +16,7 @@ public class Configuration {
     public double c1;
     public double c2;
     public double weightLimit = 0.0;
+    public double volumeLimit = 0.0;
     public String knapsackInputFile = "";
     private Properties defaultProps;
 
@@ -39,8 +40,10 @@ public class Configuration {
         c1 = parseDouble("c1");
         c2 = parseDouble("c2");
 
+        // specific additional configuration for knapsack problem
         if (problem.equals("knapsack")) {
             weightLimit = parseDouble("weight_limit");
+            volumeLimit = parseDouble("volume_limit");
             knapsackInputFile = parseString("knapsack_input_file");
         }
     }

@@ -2,6 +2,7 @@ package pso;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +16,9 @@ public class ParticleSwarmOptimization {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(ParticleSwarmOptimization.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        // To use '.' as a decimal separator.
+        Locale.setDefault(Locale.ENGLISH);        
     }   
     
     /**
@@ -43,7 +47,8 @@ public class ParticleSwarmOptimization {
         new Solver(ff, config.maxIterations, config.dimension, config.epsilon,
                 config.inertiaWeightStart,
                 config.inertiaWeightEnd, config.connections, config.c1,
-                config.c2, config.weightLimit, config.knapsackInputFile).solve();
+                config.c2, config.weightLimit, config.volumeLimit, 
+                config.knapsackInputFile).solve();
     }
 
     public static void usage(String progname) {

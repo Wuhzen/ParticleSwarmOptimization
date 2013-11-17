@@ -20,13 +20,14 @@ public class Solver {
     private double c2;
     private double c1;
     private double weightLimit;
+    double volumeLimit;
     private int step;
     double inertiaStep;
 
     public Solver(FitnessFunction fitness, int maxIterations, int dimension,
             double epsilon, double inertiaWeightStart,
             double inertiaWeightEnd, int connections, double c1, double c2,
-            double weightLimit, String knapsackInputFile) {
+            double weightLimit, double volumeLimit, String knapsackInputFile) {
         this.fitness = fitness;
         this.maxIterations = maxIterations;
         this.dimension = dimension;
@@ -38,14 +39,19 @@ public class Solver {
         this.c1 = c1;
         this.c2 = c2;
         this.weightLimit = weightLimit;
+        this.volumeLimit = volumeLimit;
 
         // In case of knapsack problem parse the input packages file
         if (fitness instanceof KnapsackProblem) {
-            try {
-                ((KnapsackProblem) fitness).parsePackagesFile(knapsackInputFile);
-            } catch (Exception e) {
-            }
+            boolean considerVolume = (volumeLimit == -1) ? false : true;
+            ((KnapsackProblem)fitness).parsePackagesFile(knapsackInputFile,
+                    considerVolume);
+            
+            ((KnapsackProblem)fitness).setWeightLimit(weightLimit);
         }
+        
+        // DEBUG
+//        ((KnapsackProblem) fitness).printPackages();
 
         int particleCount = 10 + (int) (2 * Math.sqrt(dimension));
         Particle.setC1(c1);
@@ -54,9 +60,7 @@ public class Solver {
         Particle.setFitness(fitness);
 
         for (int i = 0; i < particleCount; i++) {
-            particles.add(new Particle(dimension,
-                    fitness.getParticlePositionMin(),
-                    fitness.getParticlePositionMax()));
+            particles.add(new Particle(dimension));
         }
 
         // find the best global position and set it to all of them

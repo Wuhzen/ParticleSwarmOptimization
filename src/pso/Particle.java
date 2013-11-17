@@ -12,12 +12,7 @@ public class Particle {
     private static double c1;
     private static double c2;
     private static double w;
-    private static FitnessFunction fitness;
-    private static Random randomGenerator = new Random();
-    private double positionMin;
-    private double positionMax;
-    private double clampMin;
-    private double clampMax;
+    private static FitnessFunction fitness;    
 
     /**
      * Be sure to set bestGlobalPosition after this call before updating
@@ -28,18 +23,16 @@ public class Particle {
      * @param c2
      * @param w
      */
-    public Particle(int dimension, double positionMin, double positionMax) {
-        this.positionMin = positionMin;
-        this.positionMax = positionMax;
-        clampMin         = positionMin / 100;
-        clampMax         = positionMax / 100;
-
+    public Particle(int dimension) {
         velocity = new ArrayList<>();
         for (int i = 0; i < dimension; i++) // starting velocity is zero
         {
             velocity.add(0.0);
         }
-        position = getRandomList(dimension, positionMin, positionMax);
+
+        // generate random initial position
+        position = fitness.initParticlePosition(dimension);
+        // set current position as best position seen so far
         bestParticlePosition = new ArrayList<Double>(position);
     }
 
@@ -88,8 +81,8 @@ public class Particle {
      * position(t)) + c2 * r2 * (bestGlobalPosition(t) - position(t)))
      */
     public void updateVelocity() {
-        double r1 = getRandomNumber(0, 1);
-        double r2 = getRandomNumber(0, 1);
+        double r1 = fitness.getRandomNumber(0, 1);
+        double r2 = fitness.getRandomNumber(0, 1);
 
         ArrayList<Double> pTxT = subtractLists(bestParticlePosition, position);
         ArrayList<Double> gTxT = subtractLists(bestGlobalPosition, position);
@@ -101,18 +94,8 @@ public class Particle {
         ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT, c2r2pTxT);
 
         velocity = multiplyList(w, vTc1r1pTxTc2r2pTxT);
-        clampVelocity(velocity);
-    }
-
-    private void clampVelocity(ArrayList<Double> velocity) {
-        for (int i = 0; i < velocity.size(); i++) {
-            if (velocity.get(i) < clampMin) {
-                velocity.set(i, clampMin);
-            } else if (velocity.get(i) > clampMax) {
-                velocity.set(i, clampMax);
-            }
-        }
-    }
+        velocity = fitness.clampVelocity(velocity);
+    }   
 
     public static ArrayList<Double> subtractLists(final ArrayList<Double> a,
             final ArrayList<Double> b) {
@@ -145,19 +128,7 @@ public class Particle {
             retval.add(c * list.get(i));
         }
         return retval;
-    }
-
-    public static double getRandomNumber(double low, double high) {
-        return (high - low) * randomGenerator.nextDouble() + low;
-    }
-
-    public static ArrayList<Double> getRandomList(int size, double low, double high) {
-        ArrayList<Double> retval = new ArrayList<>();
-        for (int i = 0; i < size; i++) {
-            retval.add(getRandomNumber(low, high));
-        }
-        return retval;
-    }
+    }   
 
     public void print(int particleID) {
         System.out.println("Particle " + particleID);
@@ -182,5 +153,5 @@ public class Particle {
 
     public static void setFitness(FitnessFunction arg) {
         fitness = arg;
-    }
+    }   
 }
