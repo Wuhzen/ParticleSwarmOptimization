@@ -97,9 +97,7 @@ public class Solver {
 
     private void doStep() {
         // DEBUG
-        System.out.println("===================");
-        printParticlesData();                
-        System.out.println("===================");
+        //printParticles();
         
         // printParticlesData();
         updateParticles();
@@ -107,6 +105,13 @@ public class Solver {
         System.out.println((step + 1) + " "
                 + fitness.get(getBestGlobalPosition()));
         
+    }
+    
+    // DEBUG
+    private void printParticles() {
+        System.out.println("===================");
+        printParticlesData();                
+        System.out.println("===================");
     }
 
     private void updateParticles() {
