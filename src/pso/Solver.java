@@ -98,8 +98,7 @@ public class Solver {
     private void doStep() {
         // DEBUG
         //printParticles();
-        
-        // printParticlesData();
+                
         updateParticles();
 
         System.out.println((step + 1) + " "
