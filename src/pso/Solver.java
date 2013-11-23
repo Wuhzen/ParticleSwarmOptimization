@@ -100,6 +100,7 @@ public class Solver {
         //printParticles();
         
         // printParticlesData();
+    	
         updateParticles();
 
         System.out.println((step + 1) + " "
@@ -170,6 +171,7 @@ public class Solver {
 
     private void printParticlesData() {
         for (int i = 0; i < particles.size(); i++) {
+        	if (i == 1)
             particles.get(i).print(i);
         }
     }
