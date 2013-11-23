@@ -98,7 +98,13 @@ public class Solver {
     private void doStep() {
         // DEBUG
         //printParticles();
+<<<<<<< HEAD
                 
+=======
+        
+        // printParticlesData();
+    	
+>>>>>>> 89f4fda3fe0f5bd5759453359b5563cd280edff5
         updateParticles();
 
         System.out.println((step + 1) + " "
@@ -169,6 +175,7 @@ public class Solver {
 
     private void printParticlesData() {
         for (int i = 0; i < particles.size(); i++) {
+        	if (i == 1)
             particles.get(i).print(i);
         }
     }

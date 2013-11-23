@@ -66,7 +66,7 @@ public class KnapsackProblem extends FitnessFunction {
         if ((weightLimit - knapsackQuality(vector, Package.PackageAttributes.WEIGHT)) < 0.0) {
             fitness = Double.MAX_VALUE;
         } else {
-            fitness = maxValue - knapsackQuality(vector, Package.PackageAttributes.VALUE);
+            fitness = maxValue - knapsackQuality(vector, Package.PackageAttributes.VALUE); 
         }
 
         return fitness;
@@ -201,7 +201,7 @@ public class KnapsackProblem extends FitnessFunction {
         double newPos;
         
         for(int i = 0; i < position.size(); i++) {
-            newPos = (getRandomNumber(0.0, 1.0) < velocity.get(i)) ? 1.0 : 0.0;
+        	newPos = (getRandomNumber(0.0, 1.0) < sigmoid(velocity.get(i))) ? 1.0 : 0.0;
             position.set(i, newPos);
         }
         
@@ -222,7 +222,7 @@ public class KnapsackProblem extends FitnessFunction {
             // Map to range <-1, 1> using sigmoid function        
             //sign = (velocity.get(i) > 0.0) ? 1 : -1;
             //velocity.set(i, sign * sigmoid(velocity.get(i)));
-            velocity.set(i, sigmoid(velocity.get(i)));
+            //velocity.set(i, sigmoid(velocity.get(i)));
         }
 
         return velocity;
