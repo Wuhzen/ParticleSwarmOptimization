@@ -43,6 +43,8 @@ public class Solver {
 
         // In case of knapsack problem parse the input packages file
         if (fitness instanceof KnapsackProblem) {
+            ((KnapsackProblem)fitness).setDimension(dimension);
+            
             boolean considerVolume = (volumeLimit == -1) ? false : true;
             ((KnapsackProblem)fitness).parsePackagesFile(knapsackInputFile,
                     considerVolume);
@@ -50,7 +52,7 @@ public class Solver {
             // terrible hacks which I am ashamed for but no time to
             // change factory pattern.
             ((KnapsackProblem)fitness).setWeightLimit(weightLimit); 
-            ((KnapsackProblem)fitness).setMaxvalue();
+            ((KnapsackProblem)fitness).setMaxvalue();            
         }
         
         // DEBUG
@@ -64,8 +66,11 @@ public class Solver {
 
         for (int i = 0; i < particleCount; i++) {
             particles.add(new Particle(dimension));
-        }
-
+            
+            // DEBUG
+            //particles.get(i).printPosition();
+        }       
+        
         // find the best global position and set it to all of them
         updateBestGlobalPosition(connections);
     }
@@ -84,15 +89,24 @@ public class Solver {
                 return step + 1;
             }
         }
+        
+        System.out.println("#Solution not found");
+        
         return maxIterations;
     }
 
     private void doStep() {
+        // DEBUG
+        System.out.println("===================");
+        printParticlesData();                
+        System.out.println("===================");
+        
         // printParticlesData();
         updateParticles();
 
         System.out.println((step + 1) + " "
                 + fitness.get(getBestGlobalPosition()));
+        
     }
 
     private void updateParticles() {
@@ -180,6 +194,11 @@ public class Solver {
         for (Particle p : particles) {
             ArrayList<Double> position = p.getBestParticlePosition();
             double fitnessValue = fitness.get(position);
+            
+            //DEBUG
+//            System.out.println("fitness: " + fitnessValue);
+//            System.out.println("position: " + position);
+            
             if (fitnessValue < best) {
                 retval = new ArrayList<Double>(position);
                 best = fitnessValue;

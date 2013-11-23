@@ -1,6 +1,7 @@
 package pso;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -18,7 +19,7 @@ public class ParticleSwarmOptimization {
         }
         
         // To use '.' as a decimal separator.
-        Locale.setDefault(Locale.ENGLISH);        
+        Locale.setDefault(Locale.ENGLISH);                  
     }   
     
     /**

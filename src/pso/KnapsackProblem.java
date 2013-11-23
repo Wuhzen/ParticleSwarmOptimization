@@ -26,6 +26,11 @@ public class KnapsackProblem extends FitnessFunction {
     private ArrayList<Package> packages;
     private double weightLimit;
     private double maxValue;
+    private double dimension;
+
+    public void setDimension(double dimension) {
+        this.dimension = dimension;
+    }    
 
     public KnapsackProblem() {
         super(CommonConstants.knapsackProblemParticlePositionMin,
@@ -94,9 +99,9 @@ public class KnapsackProblem extends FitnessFunction {
                 throw new KnapsackPackagesFileEmptyException();
             }
 
-            while (scanner.hasNextLine()) {
+            for(int i = 0; i < dimension; i++) {
                 processLine(scanner.next(), considerVolume);
-            }
+            }            
         } catch (NullPointerException e) {
             System.err.println("ERROR: No file specified.\n");
             throw e;
@@ -106,7 +111,11 @@ public class KnapsackProblem extends FitnessFunction {
         } catch (FileNotFoundException e) {
             System.err.println("ERROR: File " + path + " was not found.\n");
             throw new RuntimeException(e);
-        } finally {
+        } catch (NoSuchElementException e) {
+            System.err.println("ERROR: Not enough packages specification in file " + path);
+            throw new RuntimeException(e);
+        }
+        finally {
             if (scanner != null) {
                 scanner.close();
             }
@@ -168,22 +177,19 @@ public class KnapsackProblem extends FitnessFunction {
     @Override
     public ArrayList<Double> initParticlePosition(int dimension) {
         double maxPackageWeight = getMaxPackageWeight();
-        int minFitPackages = (int) (weightLimit / maxPackageWeight);
-        int i;
+        int minFitPackages = (int) (weightLimit / maxPackageWeight);        
 
         ArrayList<Double> position = new ArrayList<>(dimension);
-        for (i = 0; i < dimension; i++) {
+        for (int i = 0; i < dimension; i++) {
             position.add(0.0);
         }
-
-        i = 0;
-        while (i < minFitPackages) {
+        
+        for(int i = 0; (i < dimension) && (i < minFitPackages); i++) {                            
             int index = (int) getRandomNumber(0, dimension - Double.MIN_VALUE);
             if (position.get(index) != 0.0) {
                 continue;
             }
-            position.set(index, 1.0);
-            i++;
+            position.set(index, 1.0);            
         }
 
         return position;
@@ -204,7 +210,7 @@ public class KnapsackProblem extends FitnessFunction {
     
     @Override
     public ArrayList<Double> clampVelocity(ArrayList<Double> velocity) {
-        int sign;
+        //int sign;
 
         for (int i = 0; i < velocity.size(); i++) {
             if (velocity.get(i) < clampMin) {
@@ -214,8 +220,9 @@ public class KnapsackProblem extends FitnessFunction {
             }
 
             // Map to range <-1, 1> using sigmoid function        
-            sign = (velocity.get(i) > 0.0) ? 1 : -1;
-            velocity.set(i, sign * sigmoid(velocity.get(i)));
+            //sign = (velocity.get(i) > 0.0) ? 1 : -1;
+            //velocity.set(i, sign * sigmoid(velocity.get(i)));
+            velocity.set(i, sigmoid(velocity.get(i)));
         }
 
         return velocity;
@@ -237,7 +244,7 @@ public class KnapsackProblem extends FitnessFunction {
      * @param position
      * @return
      */
-    private double knapsackQuality(ArrayList<Double> position,
+    public double knapsackQuality(ArrayList<Double> position,
             Package.PackageAttributes a) {
         double sum = 0.0;
         for (int i = 0; i < position.size(); i++) {

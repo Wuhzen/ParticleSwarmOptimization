@@ -1,5 +1,6 @@
 package pso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -135,13 +136,50 @@ public class Particle {
         return retval;
     }   
 
-    public void print(int particleID) {
+    public void print(int particleID) {        
         System.out.println("Particle " + particleID);
-        System.out.println("\tposition = " + position);
-        System.out.println("\tvelocity = " + velocity);
-        System.out.println("\tbestParticlePosition = " + bestParticlePosition);
-        System.out.println("\tbestGlobalPosition = " + bestGlobalPosition);
+        
+        // position
+        System.out.print  ("\tposition             = ");
+        printArrayListDouble(position, 3);
+        
+        // velocity
+        System.out.print  ("\tvelocity             = ");
+        printArrayListDouble(velocity, 3);
+        
+        // best positions
+        System.out.print("\tbestParticlePosition = ");
+        printArrayListDouble(bestParticlePosition, 3);
+        
+        System.out.print("\tbestGlobalPosition   = ");
+        printArrayListDouble(bestGlobalPosition, 3);
+        
+        // fitness
+        System.out.println("\tfitness = " + fitness.get(position));
+        
+        // knapsack properties
+        if(fitness instanceof KnapsackProblem) {
+            System.out.println("\tvalue  = " + 
+                    ((KnapsackProblem)fitness).knapsackQuality(
+                    position, Package.PackageAttributes.VALUE));
+            System.out.println("\tweight = " + 
+                    ((KnapsackProblem)fitness).knapsackQuality(
+                    position, Package.PackageAttributes.WEIGHT));
+        }
 
+    }
+    
+    public void printArrayListDouble(ArrayList<Double> vec, int decPlaces) {
+        String format = "%." + decPlaces + "f";
+        
+        System.out.print("[");
+        System.out.printf(format, vec.get(0));
+        
+        for(int i = 1; i < vec.size(); i++) {
+            System.out.print(", ");
+            System.out.printf(format, vec.get(i));
+        }        
+        System.out.println("]");
     }
 
     public static void setC1(double arg) {
@@ -159,4 +197,9 @@ public class Particle {
     public static void setFitness(FitnessFunction arg) {
         fitness = arg;
     }   
+    
+    //DEBUG
+    public void printPosition() {
+        System.out.println(position);
+    }
 }
