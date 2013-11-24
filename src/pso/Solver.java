@@ -58,7 +58,7 @@ public class Solver {
         // DEBUG
 //        ((KnapsackProblem) fitness).printPackages();
 
-        int particleCount = 10 + (int) (2 * Math.sqrt(dimension));
+        int particleCount = 10 + (int) (10 * Math.sqrt(dimension));
         Particle.setC1(c1);
         Particle.setC2(c2);
         Particle.setW(inertiaWeightStart);
