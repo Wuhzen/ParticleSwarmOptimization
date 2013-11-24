@@ -5,10 +5,10 @@ import java.util.ArrayList;
 /**
  * This class implements the fitness function evaluating the circle problem.
  */
-public class CircleProblem extends FitnessFunction {
+public class CircleProblem extends Problem {
     static {
         /* Registers itself in the factory. */
-        FitnessFunctionFactory.registerFitnessFunction("circle", new CircleProblem());
+        ProblemFactory.registerProblem("circle", new CircleProblem());
     }        
     private static final double clampMin = 
             CommonConstants.circleProblemParticlePositionMin / 100;
@@ -40,7 +40,7 @@ public class CircleProblem extends FitnessFunction {
      * @return 
      */
     @Override
-    public FitnessFunction createFitnessFunction() {
+    public Problem createFitnessFunction() {
         return new CircleProblem();
     }
     

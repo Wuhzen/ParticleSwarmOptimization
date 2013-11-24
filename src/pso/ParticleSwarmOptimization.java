@@ -7,6 +7,10 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
+import pso.knapsack.KnapsackSolver;
+
 public class ParticleSwarmOptimization {
 
     static {
@@ -40,16 +44,24 @@ public class ParticleSwarmOptimization {
         }
 
         /* Create the factory */
-        FitnessFunctionFactory ffFactory = FitnessFunctionFactory.getInstance();
+        ProblemFactory ffFactory = ProblemFactory.getInstance();
 
         /* Factory creates the product - fitness function */
-        FitnessFunction ff = ffFactory.createFitnessFunction(config.problem);
+        Problem ff = ffFactory.createProblem(config.problem);
 
-        new Solver(ff, config.maxIterations, config.dimension, config.epsilon,
-                config.inertiaWeightStart,
-                config.inertiaWeightEnd, config.connections, config.c1,
-                config.c2, config.weightLimit, config.volumeLimit, 
-                config.knapsackInputFile).solve();
+        if (ff instanceof KnapsackProblem) {
+        	new KnapsackSolver((KnapsackProblem)ff, config.maxIterations, config.dimension, config.epsilon,
+                    config.inertiaWeightStart,
+                    config.inertiaWeightEnd, config.connections, config.c1,
+                    config.c2, config.weightLimit, config.volumeLimit, 
+                    config.knapsackInputFile).solve();	
+        } else {
+        	new CircleSolver(ff, config.maxIterations, config.dimension, config.epsilon,
+                    config.inertiaWeightStart,
+                    config.inertiaWeightEnd, config.connections, config.c1,
+                    config.c2).solve();
+        }
+        
     }
 
     public static void usage(String progname) {

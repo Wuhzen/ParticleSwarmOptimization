@@ -7,17 +7,17 @@ import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Scanner;
-import static pso.FitnessFunction.getRandomNumber;
+import static pso.Problem.getRandomNumber;
 
 
 /**
  * This class implements the fitness function evaluating the knapsack problem.
  */
-public class KnapsackProblem extends FitnessFunction {
+public class KnapsackProblem extends Problem {
 
     static {
         /* Registers itself in the factory. */
-        FitnessFunctionFactory.registerFitnessFunction("knapsack", new KnapsackProblem());
+        ProblemFactory.registerProblem("knapsack", new KnapsackProblem());
     }
     private static final double clampMin =
             CommonConstants.knapsackProblemClampVelocityMin;
@@ -78,7 +78,7 @@ public class KnapsackProblem extends FitnessFunction {
      * @return
      */
     @Override
-    public FitnessFunction createFitnessFunction() {
+    public Problem createFitnessFunction() {
         return new KnapsackProblem();
     }
 
@@ -87,7 +87,7 @@ public class KnapsackProblem extends FitnessFunction {
      *
      * @param path Path to the file
      */
-    void parsePackagesFile(String path, boolean considerVolume) {
+    public void parsePackagesFile(String path, boolean considerVolume) {
         File f;
         Scanner scanner = null;
 

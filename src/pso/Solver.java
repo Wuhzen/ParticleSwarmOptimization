@@ -6,29 +6,26 @@ import java.util.Comparator;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Comparison;
 
-public class Solver {
+public abstract class Solver {
 
-    private FitnessFunction fitness;
-    private int maxIterations;
-    private int dimension;
-    private double epsilon;
-    private int rounds;
-    private double inertiaWeightEnd;
-    private double inertiaWeightStart;
-    private int connections;
-    private ArrayList<Particle> particles = new ArrayList<>();
-    private double c2;
-    private double c1;
-    private double weightLimit;
-    double volumeLimit;
-    private int step;
-    double inertiaStep;
+	protected Problem problem;
+    protected int maxIterations;
+    protected int dimension;
+    protected double epsilon;
+    protected int rounds;
+    protected double inertiaWeightEnd;
+    protected double inertiaWeightStart;
+    protected int connections;
+    protected ArrayList<Particle> particles = new ArrayList<>();
+    protected double c2;
+    protected double c1;
+    protected int step;
+    protected double inertiaStep;
 
-    public Solver(FitnessFunction fitness, int maxIterations, int dimension,
+    public Solver(Problem problem, int maxIterations, int dimension,
             double epsilon, double inertiaWeightStart,
-            double inertiaWeightEnd, int connections, double c1, double c2,
-            double weightLimit, double volumeLimit, String knapsackInputFile) {
-        this.fitness = fitness;
+            double inertiaWeightEnd, int connections, double c1, double c2) {
+        this.problem = problem;
         this.maxIterations = maxIterations;
         this.dimension = dimension;
         this.epsilon = epsilon;
@@ -38,41 +35,12 @@ public class Solver {
         this.connections = connections;
         this.c1 = c1;
         this.c2 = c2;
-        this.weightLimit = weightLimit;
-        this.volumeLimit = volumeLimit;
 
-        // In case of knapsack problem parse the input packages file
-        if (fitness instanceof KnapsackProblem) {
-            ((KnapsackProblem)fitness).setDimension(dimension);
-            
-            boolean considerVolume = (volumeLimit == -1) ? false : true;
-            ((KnapsackProblem)fitness).parsePackagesFile(knapsackInputFile,
-                    considerVolume);
-            
-            // terrible hacks which I am ashamed for but no time to
-            // change factory pattern.
-            ((KnapsackProblem)fitness).setWeightLimit(weightLimit); 
-            ((KnapsackProblem)fitness).setMaxvalue();            
-        }
-        
-        // DEBUG
-//        ((KnapsackProblem) fitness).printPackages();
-
-        int particleCount = 10 + (int) (10 * Math.sqrt(dimension));
         Particle.setC1(c1);
         Particle.setC2(c2);
         Particle.setW(inertiaWeightStart);
-        Particle.setFitness(fitness);
-
-        for (int i = 0; i < particleCount; i++) {
-            particles.add(new Particle(dimension));
-            
-            // DEBUG
-            //particles.get(i).printPosition();
-        }       
-        
-        // find the best global position and set it to all of them
-        updateBestGlobalPosition(connections);
+        Particle.setFitness(problem);
+        this.particles = new ArrayList<>();
     }
 
     public int solve() {
@@ -80,7 +48,7 @@ public class Solver {
         for (step = 0; step < maxIterations; step++) {
             doStep();
 
-            double fitnessValue = fitness.get(getBestGlobalPosition());
+            double fitnessValue = problem.get(getBestGlobalPosition());
             if (fitnessValue < epsilon) {
                 System.out.println("#Found solution in step " + (step + 1)
                         + " with fitness function " + fitnessValue);
@@ -104,7 +72,7 @@ public class Solver {
         updateParticles();
 
         System.out.println((step + 1) + " "
-                + fitness.get(getBestGlobalPosition()));
+                + problem.get(getBestGlobalPosition()));
         
     }
     
@@ -127,7 +95,7 @@ public class Solver {
 
     }
 
-    private void updateBestGlobalPosition(int connections) {
+    protected void updateBestGlobalPosition(int connections) {
         if (connections == -1) {
             setBestGlobalPositionToAllParticles(getBestGlobalPosition());
         } else {
@@ -200,7 +168,7 @@ public class Solver {
         double best = Double.MAX_VALUE;
         for (Particle p : particles) {
             ArrayList<Double> position = p.getBestParticlePosition();
-            double fitnessValue = fitness.get(position);
+            double fitnessValue = problem.get(position);
             
             //DEBUG
 //            System.out.println("fitness: " + fitnessValue);
