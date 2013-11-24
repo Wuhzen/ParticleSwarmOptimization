@@ -1,31 +1,31 @@
 package pso;
 
 import java.util.HashMap;
-import pso.FitnessFunction;
+import pso.Problem;
 
 /**
  * This class defines the Factory Method which returns a product - an
  * object implementin specific fitness function. The class is created as a
  * Singleton.
  */
-public class FitnessFunctionFactory {
+public class ProblemFactory {
     
     /* Only one instance of this class exists. */   
-    private static final FitnessFunctionFactory instance 
-            = new FitnessFunctionFactory();    
+    private static final ProblemFactory instance 
+            = new ProblemFactory();    
     
     /* All known objects implementing Fitness Function */
-    private static HashMap<String, FitnessFunction> registeredFitnessFunctions 
+    private static HashMap<String, Problem> registeredProblem 
             = new HashMap<>();
 
     
-    private FitnessFunctionFactory() {
+    private ProblemFactory() {
     }
 
     /**     
      * @return The only existing instance of this class.
      */
-    public static FitnessFunctionFactory getInstance() {
+    public static ProblemFactory getInstance() {
         return instance;
     }
 
@@ -34,8 +34,8 @@ public class FitnessFunctionFactory {
      * @param id product id
      * @param f Product - Object implementning certain Fitness Function
      */
-    public static void registerFitnessFunction(String id, FitnessFunction f) {
-        registeredFitnessFunctions.put(id, f);
+    public static void registerProblem(String id, Problem f) {
+        registeredProblem.put(id, f);
     }
     
     /**
@@ -43,7 +43,7 @@ public class FitnessFunctionFactory {
      * @param id product id
      * @return New product
      */
-    public FitnessFunction createFitnessFunction(String id) {
-        return registeredFitnessFunctions.get(id).createFitnessFunction();
+    public Problem createProblem(String id) {
+        return registeredProblem.get(id).createFitnessFunction();
     }
 }

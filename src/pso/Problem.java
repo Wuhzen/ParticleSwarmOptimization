@@ -3,7 +3,7 @@ package pso;
 import java.util.ArrayList;
 import java.util.Random;
 
-public abstract class FitnessFunction {
+public abstract class Problem {
 
     protected double particlePostionMin;
     protected double particlePostionMax;
@@ -16,7 +16,7 @@ public abstract class FitnessFunction {
      * @param particlePostionMin
      * @param particlePostionMax 
      */
-    public FitnessFunction(double particlePostionMin,
+    public Problem(double particlePostionMin,
                            double particlePostionMax,
                            double clampMin,
                            double clampMax) {
@@ -42,7 +42,7 @@ public abstract class FitnessFunction {
      *
      * @return new instance
      */
-    public abstract FitnessFunction createFitnessFunction();
+    public abstract Problem createFitnessFunction();
     
     /**
      * Initializes particle's position

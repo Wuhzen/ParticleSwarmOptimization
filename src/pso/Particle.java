@@ -13,7 +13,7 @@ public class Particle {
     private static double c1;
     private static double c2;
     private static double w;
-    private static FitnessFunction fitness;
+    private static Problem fitness;
     private int dimension;
 
     /**
@@ -206,7 +206,7 @@ public class Particle {
         return position;
     }
 
-    public static void setFitness(FitnessFunction arg) {
+    public static void setFitness(Problem arg) {
         fitness = arg;
     }
 
