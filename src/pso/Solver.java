@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Comparison;
+import pso.Package.PackageAttributes;
 
 public class Solver {
 
@@ -43,22 +44,23 @@ public class Solver {
 
         // In case of knapsack problem parse the input packages file
         if (fitness instanceof KnapsackProblem) {
-            ((KnapsackProblem)fitness).setDimension(dimension);
-            
+            ((KnapsackProblem) fitness).setDimension(dimension);
+
             boolean considerVolume = (volumeLimit == -1) ? false : true;
-            ((KnapsackProblem)fitness).parsePackagesFile(knapsackInputFile,
+            ((KnapsackProblem) fitness).parsePackagesFile(knapsackInputFile,
                     considerVolume);
-            
+
             // terrible hacks which I am ashamed for but no time to
             // change factory pattern.
-            ((KnapsackProblem)fitness).setWeightLimit(weightLimit); 
-            ((KnapsackProblem)fitness).setMaxvalue();            
+            ((KnapsackProblem) fitness).setWeightLimit(weightLimit);
+            ((KnapsackProblem) fitness).setMaxvalue();
         }
-        
+
         // DEBUG
 //        ((KnapsackProblem) fitness).printPackages();
 
         int particleCount = 10 + (int) (2 * Math.sqrt(dimension));
+//        int particleCount = 2000;
         Particle.setC1(c1);
         Particle.setC2(c2);
         Particle.setW(inertiaWeightStart);
@@ -66,11 +68,11 @@ public class Solver {
 
         for (int i = 0; i < particleCount; i++) {
             particles.add(new Particle(dimension));
-            
+
             // DEBUG
             //particles.get(i).printPosition();
-        }       
-        
+        }
+
         // find the best global position and set it to all of them
         updateBestGlobalPosition(connections);
     }
@@ -89,33 +91,34 @@ public class Solver {
                 return step + 1;
             }
         }
-        
+
         System.out.println("#Solution not found");
-        
+
+
+        //System.out.println(getBestGlobalPosition());
+        if (fitness instanceof KnapsackProblem) {
+            System.out.println(((KnapsackProblem) fitness).knapsackQuality(getBestGlobalPosition(), PackageAttributes.VALUE));
+        }
+
         return maxIterations;
     }
 
     private void doStep() {
         // DEBUG
-        //printParticles();
-<<<<<<< HEAD
-                
-=======
-        
+        //printParticles();        
         // printParticlesData();
-    	
->>>>>>> 89f4fda3fe0f5bd5759453359b5563cd280edff5
+
         updateParticles();
 
         System.out.println((step + 1) + " "
                 + fitness.get(getBestGlobalPosition()));
-        
+
     }
-    
+
     // DEBUG
     private void printParticles() {
         System.out.println("===================");
-        printParticlesData();                
+        printParticlesData();
         System.out.println("===================");
     }
 
@@ -175,8 +178,9 @@ public class Solver {
 
     private void printParticlesData() {
         for (int i = 0; i < particles.size(); i++) {
-        	if (i == 1)
-            particles.get(i).print(i);
+            if (i == 1) {
+                particles.get(i).print(i);
+            }
         }
     }
 
@@ -205,11 +209,11 @@ public class Solver {
         for (Particle p : particles) {
             ArrayList<Double> position = p.getBestParticlePosition();
             double fitnessValue = fitness.get(position);
-            
+
             //DEBUG
 //            System.out.println("fitness: " + fitnessValue);
 //            System.out.println("position: " + position);
-            
+
             if (fitnessValue < best) {
                 retval = new ArrayList<Double>(position);
                 best = fitnessValue;
