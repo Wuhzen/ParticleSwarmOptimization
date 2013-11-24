@@ -45,6 +45,7 @@ public class Particle {
 		velocity = new ArrayList<>();
 		for (int i = 0; i < dimension; i++) // starting velocity is zero
 		{
+			//velocity.add(Problem.getRandomNumber(-4, 4));
 			velocity.add(0.0);
 		}
 
@@ -115,11 +116,10 @@ public class Particle {
 		ArrayList<Double> c2r2pTxT = multiplyList(c2 * r2, gTxT);
 
 		ArrayList<Double> wv = multiplyList(w, velocity);
-
 		ArrayList<Double> vTc1r1pTxT = sumLists(wv, c1r1pTxT);
 		ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT, c2r2pTxT);
 
-		velocity = vTc1r1pTxTc2r2pTxT;
+		velocity = new ArrayList<Double>(vTc1r1pTxTc2r2pTxT);
 		velocity = fitness.clampVelocity(velocity);
 	}
 
