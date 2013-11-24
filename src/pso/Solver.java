@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import pso.Package.PackageAttributes;
+
+import com.sun.xml.internal.ws.policy.spi.PolicyAssertionValidator.Fitness;
+
 public abstract class Solver {
 
     protected Problem problem;
@@ -80,7 +84,10 @@ public abstract class Solver {
         }
 
         System.out.println("#Solution not found");
-        
+        if (problem instanceof KnapsackProblem) {
+            System.out.println("value = " + ((KnapsackProblem)problem).knapsackQuality(getBestGlobalPosition(), PackageAttributes.VALUE));
+            System.out.println("weight = " + ((KnapsackProblem)problem).knapsackQuality(getBestGlobalPosition(), PackageAttributes.WEIGHT));
+        }
         writer.println("#Solution not found");
         
         writer.close();

@@ -1,6 +1,8 @@
 package pso;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -28,6 +30,8 @@ public class ParticleSwarmOptimization {
     
     /**
      * @param args the command line arguments
+     * @throws UnsupportedEncodingException 
+     * @throws FileNotFoundException 
      */
     public static void main(String[] args) {
         if (args.length != 1) { //
