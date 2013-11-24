@@ -123,6 +123,12 @@ public class Particle {
 		velocity = fitness.clampVelocity(velocity);
 	}
 
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return [a_1 - b_1, a_2 - b_2, ...]
+	 */
 	public static ArrayList<Double> subtractLists(final ArrayList<Double> a,
 			final ArrayList<Double> b) {
 		ArrayList<Double> retval = new ArrayList<Double>();
@@ -135,6 +141,12 @@ public class Particle {
 		return retval;
 	}
 
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return [a_1 + b_1, a_2 + b2, ...]
+	 */
 	public static ArrayList<Double> sumLists(final ArrayList<Double> a,
 			final ArrayList<Double> b) {
 		ArrayList<Double> retval = new ArrayList<Double>();
@@ -147,6 +159,11 @@ public class Particle {
 		return retval;
 	}
 
+	/**
+	 * @param c
+	 * @param list
+	 * @return c*list_i for all i
+	 */
 	public static ArrayList<Double> multiplyList(final double c,
 			final ArrayList<Double> list) {
 		ArrayList<Double> retval = new ArrayList<Double>();
