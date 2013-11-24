@@ -79,8 +79,8 @@ public abstract class Solver {
 
         updateParticles();
 
-        System.out.println((step + 1) + " "
-                + problem.get(getBestGlobalPosition()));                
+//        System.out.println((step + 1) + " "
+//                + problem.get(getBestGlobalPosition()));                
     }
 
     // DEBUG
