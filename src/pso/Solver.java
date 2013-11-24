@@ -1,7 +1,6 @@
 package pso;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,8 +22,6 @@ public abstract class Solver {
     protected int step;
     protected double inertiaStep;
     
-    private PrintWriter writer;
-
     public Solver(Problem problem, int maxIterations, int dimension,
             double epsilon, double inertiaWeightStart, double inertiaWeightEnd,
             int connections, double c1, double c2) {
@@ -48,19 +45,10 @@ public abstract class Solver {
 
     }
 
-    public int solve() throws FileNotFoundException, UnsupportedEncodingException {
-
-        // DOCU PURPOSES - DELETE LATYER!!!
-        writer = new PrintWriter("plots/task3c-3.dat", "UTF-8");
-
-        System.out.println("#c1 = " + c1 + ", c2 = " + c2);
-        System.out.println("#particles = " + particles.size());        
-        System.out.println("#step bestFitnessFunction");
-        
-        writer.println("#c1 = " + c1 + ", c2 = " + c2);
-        writer.println("#particles = " + particles.size());        
-        writer.println("#step bestFitnessFunction");
-        
+    public int solve() throws FileNotFoundException, UnsupportedEncodingException {       
+//        System.out.println("#c1 = " + c1 + ", c2 = " + c2);
+//        System.out.println("#particles = " + particles.size());        
+//        System.out.println("#step bestFitnessFunction");                        
 
         for (step = 0; step < maxIterations; step++) {
             doStep();
@@ -68,22 +56,13 @@ public abstract class Solver {
             double fitnessValue = problem.get(getBestGlobalPosition());
             if (fitnessValue < epsilon) {
                 System.out.println("#Found solution in step " + (step + 1)
-                        + " with fitness function " + fitnessValue);
+                        + " with fitness function " + fitnessValue);                                
                 
-                writer.println("#Found solution in step " + (step + 1)
-                        + " with fitness function " + fitnessValue);
-                
-                // System.out.println("#Best solution is "
-                // + getBestGlobalPosition());
                 return step + 1;
             }
         }
 
         System.out.println("#Solution not found");
-        
-        writer.println("#Solution not found");
-        
-        writer.close();
         
         return maxIterations;
     }
@@ -96,10 +75,7 @@ public abstract class Solver {
         updateParticles();
 
         System.out.println((step + 1) + " "
-                + problem.get(getBestGlobalPosition()));
-        
-        writer.println((step + 1) + " "
-                + problem.get(getBestGlobalPosition()));
+                + problem.get(getBestGlobalPosition()));                
     }
 
     // DEBUG
