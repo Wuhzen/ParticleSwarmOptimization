@@ -206,11 +206,12 @@ public class KnapsackProblem extends FitnessFunction {
 		for (int i = 0; (i < dimension) && (i < minFitPackages); i++) {
 			int index = (int) getRandomNumber(0, dimension - Double.MIN_VALUE);
 			if (position.get(index) != 0.0) {
-				i--;
+				//i--;
 				continue;
 			}
 			position.set(index, 1.0);
 		}
+		
 
 		return position;
 	}
