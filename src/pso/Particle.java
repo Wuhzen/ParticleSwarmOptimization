@@ -15,6 +15,8 @@ public class Particle {
 	private static double w;
 	private static FitnessFunction fitness;
 	
+	private ArrayList<Double> velocityZero = new ArrayList<>();
+	private ArrayList<Double> velocityOne  = new ArrayList<>();
 
 	/**
 	 * Be sure to set bestGlobalPosition after this call before updating
@@ -30,6 +32,8 @@ public class Particle {
 		for (int i = 0; i < dimension; i++) // starting velocity is zero
 		{
 			velocity.add(0.0);
+			velocityOne.add(0.0);
+			velocityZero.add(0.0);
 		}
 
 		// generate random initial position
@@ -76,12 +80,12 @@ public class Particle {
 	 */
 	public void updatePosition() {
 		updateVelocity();
-		position = sumLists(position, velocity);
+		//position = sumLists(position, velocity);
 		position = fitness.clampPosition(position, velocity);
-
-		if (Math.abs(fitness.get(position)) < Math.abs(fitness
-				.get(bestParticlePosition))) {
-			bestParticlePosition = position;
+		//System.out.println(position); 
+		if (fitness.get(position) < fitness
+				.get(bestParticlePosition)) {
+			bestParticlePosition = new ArrayList<Double>(position);
 		}
 	}
 
@@ -93,7 +97,7 @@ public class Particle {
 		double r1 = fitness.getRandomNumber(0, 1);
 		double r2 = fitness.getRandomNumber(0, 1);
 
-		ArrayList<Double> pTxT = subtractLists(bestParticlePosition, position);
+		/*ArrayList<Double> pTxT = subtractLists(bestParticlePosition, position);
 		ArrayList<Double> gTxT = subtractLists(bestGlobalPosition, position);
 
 		ArrayList<Double> c1r1pTxT = multiplyList(c1 * r1, pTxT);
@@ -106,7 +110,36 @@ public class Particle {
 
 		velocity = vTc1r1pTxTc2r2pTxT;
 
+		velocity = fitness.clampVelocity(velocity);*/
+		for (int i = 0; i < velocity.size(); i++) {
+			double d1ij2, d1ij1, d0ij2, d0ij1;
+			
+			if (bestParticlePosition.get(i) == 1.0) {
+				d1ij1 = c1 * r1;
+				d0ij1 = -c1 * r1;
+			} else {
+				d1ij1 = -c1 * r1;
+				d0ij1 = c1 * r1;
+			}
+			
+			if (bestGlobalPosition.get(i) == 1.0) {
+				d1ij2 = c2 * r2;
+				d0ij2 = -c2 * r2;
+			} else {
+				d0ij2 = c2 * r2;
+				d1ij2 = -c2 * r2;
+			}
+			velocityOne.set(i, w * velocityOne.get(i) + d1ij1 + d1ij2);
+			velocityZero.set(i, w * velocityZero.get(i) + d0ij1 + d0ij2);
+			
+			if (position.get(i) == 1.0) {
+				velocity.set(i, velocityZero.get(i));
+			} else {
+				velocity.set(i, velocityOne.get(i));
+			}
+		}
 		velocity = fitness.clampVelocity(velocity);
+		//System.out.println(bestGlobalPosition);
 	}
 
 	public static ArrayList<Double> subtractLists(final ArrayList<Double> a,

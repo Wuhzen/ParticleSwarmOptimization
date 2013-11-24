@@ -105,17 +105,15 @@ public class Solver {
         // DEBUG
         //printParticles();
         
-        /*// printParticlesData();
-    	for (int i = 0; i < particles.size(); i++) {
-    		System.out.println("fit: " + fitness.get(particles.get(i).getPosition()));
+        // printParticlesData();
+    	/*for (int i = 0; i < particles.size(); i++) {
+    		System.out.println(i + "-fit: " + fitness.get(particles.get(i).getBestParticlePosition()));
     	}*/
         updateParticles();
 
-        System.out.print((step + 1) + " "
+        System.out.println((step + 1) + " "
                 + fitness.get(getBestGlobalPosition()));
 
-        System.out.println(" "
-                + fitness.get(getBestGlobalPositionPositive()));
         //printBestParticle();
         
     }

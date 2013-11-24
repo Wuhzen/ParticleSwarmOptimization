@@ -221,12 +221,16 @@ public class KnapsackProblem extends FitnessFunction {
 		double newPos;
 
 		for (int i = 0; i < position.size(); i++) {
-			newPos = (getRandomNumber(0.0, 1.0) < sigmoid(velocity.get(i))) ? 1.0
-					: 0.0;
+			newPos = (getRandomNumber(0.0, 1.0) < sigmoid(velocity.get(i))) ? complement(position.get(i))
+					: position.get(i);
 			position.set(i, newPos);
 		}
 
 		return position;
+	}
+	
+	private double complement(double arg) {
+		return (arg == 0.0) ? 1.0 : 0.0;
 	}
 
 	@Override
