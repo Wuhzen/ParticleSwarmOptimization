@@ -1,6 +1,8 @@
 package pso;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -29,7 +31,7 @@ public class ParticleSwarmOptimization {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
         if (args.length != 1) { //
             usage("ParticleSwarmOptimization");
             return;
@@ -56,10 +58,10 @@ public class ParticleSwarmOptimization {
                     config.c2, config.weightLimit, config.volumeLimit, 
                     config.knapsackInputFile).solve();	
         } else {
-//        	new CircleSolver(ff, config.maxIterations, config.dimension, config.epsilon,
-//                    config.inertiaWeightStart,
-//                    config.inertiaWeightEnd, config.connections, config.c1,
-//                    config.c2).solve();
+        	new CircleSolver(ff, config.maxIterations, config.dimension, config.epsilon,
+                    config.inertiaWeightStart,
+                    config.inertiaWeightEnd, config.connections, config.c1,
+                    config.c2).solve();
         }
         
     }
