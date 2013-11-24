@@ -1,3 +1,9 @@
+/**
+ * IT3105 - Particle Swarm Optimization
+ * @author Jan Bednarik
+ * @author Tomas Dohnalek
+ */
+
 package pso;
 
 import java.io.FileNotFoundException;
@@ -13,6 +19,9 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import pso.knapsack.KnapsackSolver;
 
+/**
+ * Main class of PSO
+ */
 public class ParticleSwarmOptimization {
 
     static {

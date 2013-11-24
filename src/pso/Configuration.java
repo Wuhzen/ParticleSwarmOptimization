@@ -1,9 +1,19 @@
+/**
+ * IT3105 - Particle Swarm Optimization
+ * @author Jan Bednarik
+ * @author Tomas Dohnalek
+ */
+
 package pso;
 
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Messenger class for loading configuration files.
+ *
+ */
 public class Configuration {
 
     public String problem;

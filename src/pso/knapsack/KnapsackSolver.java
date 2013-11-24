@@ -1,3 +1,9 @@
+/**
+ * IT3105 - Particle Swarm Optimization
+ * @author Jan Bednarik
+ * @author Tomas Dohnalek
+ */
+
 package pso.knapsack;
 
 import java.io.FileNotFoundException;
@@ -10,6 +16,9 @@ import pso.Solver;
 import pso.CommonConstants;
 import pso.Package.PackageAttributes;
 
+/**
+ * Specific solver for knapsack problem
+ */
 public class KnapsackSolver extends Solver {
 
 	protected double weightLimit;
@@ -23,11 +32,13 @@ public class KnapsackSolver extends Solver {
 		super(problem, maxIterations, dimension, epsilon, inertiaWeightStart,
 				inertiaWeightEnd, connections, c1, c2);
 
+		// set specific variables
 		problem.setDimension(dimension);
 		problem.setWeightLimit(weightLimit);
 		problem.setVolumeLimit(volumeLimit);
 		problem.parsePackagesFile(knapsackInputFile);
 
+		// volume is not used
 		if (volumeLimit != -1) {
 			problem.generateRandomValues(
 					CommonConstants.knapsackProblemPackageVolumeMin,
@@ -36,8 +47,8 @@ public class KnapsackSolver extends Solver {
 
 		problem.setMaxvalue();
 
+		
 		int particleCount = 10 + (int) (2 * Math.sqrt(dimension));
-		// int particleCount = 1000;
 		particles.ensureCapacity(particleCount);
 		for (int i = 0; i < particleCount; i++) {
 			particles.add(new Particle(dimension));
@@ -47,6 +58,9 @@ public class KnapsackSolver extends Solver {
 		updateBestGlobalPosition(connections);
 	}
 
+	/**
+	 * Specific solve for knapsack.
+	 */
 	public int solve() throws FileNotFoundException,
 			UnsupportedEncodingException {
 		int retval = super.solve();

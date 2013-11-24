@@ -1,9 +1,19 @@
+/**
+ * IT3105 - Particle Swarm Optimization
+ * @author Jan Bednarik
+ * @author Tomas Dohnalek
+ */
+
 package pso;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * This class implements behavior of a single particle of swarm. 
+ *
+ */
 public class Particle {
 
 	private ArrayList<Double> position;

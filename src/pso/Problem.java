@@ -1,8 +1,18 @@
+/**
+ * IT3105 - Particle Swarm Optimization
+ * @author Jan Bednarik
+ * @author Tomas Dohnalek
+ */
+
 package pso;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * General problem for PSO.
+ * Just implement behavior below.
+ */
 public abstract class Problem {
 
     protected double particlePostionMin;
