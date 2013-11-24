@@ -1,3 +1,9 @@
+/**
+ * IT3105 - Particle Swarm Optimization
+ * @author Jan Bednarik
+ * @author Tomas Dohnalek
+ */
+
 package pso;
 
 import java.util.HashMap;

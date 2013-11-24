@@ -1,5 +1,15 @@
+/**
+ * IT3105 - Particle Swarm Optimization
+ * @author Jan Bednarik
+ * @author Tomas Dohnalek
+ */
+
 package pso;
 
+/**
+ * Specific solver for circle problem 
+ *
+ */
 public class CircleSolver extends Solver {
 
 	public CircleSolver(Problem problem, int maxIterations, int dimension,
