@@ -84,10 +84,6 @@ public abstract class Solver {
         }
 
         System.out.println("#Solution not found");
-        if (problem instanceof KnapsackProblem) {
-            System.out.println("value = " + ((KnapsackProblem)problem).knapsackQuality(getBestGlobalPosition(), PackageAttributes.VALUE));
-            System.out.println("weight = " + ((KnapsackProblem)problem).knapsackQuality(getBestGlobalPosition(), PackageAttributes.WEIGHT));
-        }
         writer.println("#Solution not found");
         
         writer.close();
@@ -125,7 +121,6 @@ public abstract class Solver {
 
     private void updateParticlesInertia() {
         Particle.setW(Particle.getW() - inertiaStep);
-
     }
 
     protected void updateBestGlobalPosition(int connections) {
@@ -217,7 +212,7 @@ public abstract class Solver {
         return retval;
     }
 
-    private ArrayList<Double> getBestGlobalPosition() {
+    protected ArrayList<Double> getBestGlobalPosition() {
         return getBestGlobalPosition(particles);
     }
 }
