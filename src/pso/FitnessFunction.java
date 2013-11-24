@@ -7,8 +7,8 @@ public abstract class FitnessFunction {
 
     protected double particlePostionMin;
     protected double particlePostionMax;
-    protected double clampMin;
-    protected double clampMax;
+    public double clampMin;
+    public double clampMax;
     private static Random randomGenerator = new Random();
 
     /**

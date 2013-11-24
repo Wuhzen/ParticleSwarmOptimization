@@ -4,6 +4,7 @@ package pso;
  *  Class holds program's common constants.
  */
 public class CommonConstants {
+	public static final double circleProblemVelocityClampConstant = 100;
     public static final double circleProblemParticlePositionMin = -100;
     public static final double circleProblemParticlePositionMax = +100;
     public static final double knapsackProblemParticlePositionMin = 0.0;    // not used

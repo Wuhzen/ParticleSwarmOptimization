@@ -11,9 +11,9 @@ public class CircleProblem extends FitnessFunction {
         FitnessFunctionFactory.registerFitnessFunction("circle", new CircleProblem());
     }        
     private static final double clampMin = 
-            CommonConstants.circleProblemParticlePositionMin / 100;
+            CommonConstants.circleProblemParticlePositionMin / CommonConstants.circleProblemVelocityClampConstant;
     private static final double clampMax = 
-            CommonConstants.circleProblemParticlePositionMax / 100;
+            CommonConstants.circleProblemParticlePositionMax / CommonConstants.circleProblemVelocityClampConstant;
 
     public CircleProblem() {
         super(CommonConstants.circleProblemParticlePositionMin,
@@ -53,6 +53,32 @@ public class CircleProblem extends FitnessFunction {
                 velocity.set(i, clampMax);
             }
         }
+    	   
+        return velocity;
+    }
+    
+    public static ArrayList<Double> pes(ArrayList<Double> velocity, Double clampMax) {
+        /*for (int i = 0; i < velocity.size(); i++) {
+            if (velocity.get(i) < clampMin) {
+                velocity.set(i, clampMin);
+            } else if (velocity.get(i) > clampMax) {
+                velocity.set(i, clampMax);
+            }
+        }*/
+    	
+    	double length = 0.0;
+    	for (int i = 0; i < velocity.size(); i++) {
+    		length += velocity.get(i) * velocity.get(i);
+    	}
+    	
+    	length = Math.sqrt(length);
+    	
+    	if (length > clampMax) {
+    		double k = length/clampMax;
+    		for (int i = 0; i < velocity.size(); i++) {
+    			velocity.set(i, velocity.get(i) / k);
+    		}
+    	}
         
         return velocity;
     }

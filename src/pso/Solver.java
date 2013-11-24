@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import pso.Package.PackageAttributes;
+
 import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Comparison;
 
 public class Solver {
@@ -81,7 +83,7 @@ public class Solver {
             doStep();
 
             double fitnessValue = fitness.get(getBestGlobalPosition());
-            if (fitnessValue < epsilon) {
+            if (fitnessValue < epsilon && fitnessValue >= 0.0) {
                 System.out.println("#Found solution in step " + (step + 1)
                         + " with fitness function " + fitnessValue);
                 // System.out.println("#Best solution is "
@@ -89,9 +91,13 @@ public class Solver {
                 return step + 1;
             }
         }
-        
         System.out.println("#Solution not found");
-        
+        System.out.println(getBestGlobalPosition());
+        if (fitness instanceof KnapsackProblem) {
+        	System.out.println("value = " + ((KnapsackProblem)fitness).knapsackQuality(getBestGlobalPosition(), PackageAttributes.VALUE));
+
+        	System.out.println("weight = " + ((KnapsackProblem)fitness).knapsackQuality(getBestGlobalPosition(), PackageAttributes.WEIGHT));
+        }
         return maxIterations;
     }
 
@@ -99,12 +105,18 @@ public class Solver {
         // DEBUG
         //printParticles();
         
-        // printParticlesData();
-    	
+        /*// printParticlesData();
+    	for (int i = 0; i < particles.size(); i++) {
+    		System.out.println("fit: " + fitness.get(particles.get(i).getPosition()));
+    	}*/
         updateParticles();
 
-        System.out.println((step + 1) + " "
+        System.out.print((step + 1) + " "
                 + fitness.get(getBestGlobalPosition()));
+
+        System.out.println(" "
+                + fitness.get(getBestGlobalPositionPositive()));
+        //printBestParticle();
         
     }
     
@@ -116,7 +128,6 @@ public class Solver {
     }
 
     private void updateParticles() {
-        updateParticlesVelocity();
         updateParticlesPosition();
         updateParticlesInertia();
         updateBestGlobalPosition(connections);
@@ -178,7 +189,7 @@ public class Solver {
 
     private void updateParticlesPosition() {
         for (Particle particle : particles) {
-            particle.updatePosition();
+        	particle.updatePosition();
         }
     }
 
@@ -206,7 +217,26 @@ public class Solver {
 //            System.out.println("fitness: " + fitnessValue);
 //            System.out.println("position: " + position);
             
-            if (fitnessValue < best) {
+            if (Math.abs(fitnessValue) < Math.abs(best)) {
+                retval = new ArrayList<Double>(position);
+                best = fitnessValue;
+            }
+        }
+        return retval;
+    }
+    
+    private ArrayList<Double> getBestGlobalPositionPositive() {
+    	ArrayList<Double> retval = new ArrayList<>();
+        double best = Double.MAX_VALUE;
+        for (Particle p : particles) {
+            ArrayList<Double> position = p.getBestParticlePosition();
+            double fitnessValue = fitness.get(position);
+            
+            //DEBUG
+//            System.out.println("fitness: " + fitnessValue);
+//            System.out.println("position: " + position);
+            
+            if (fitnessValue < best && fitnessValue >= 0.0) {
                 retval = new ArrayList<Double>(position);
                 best = fitnessValue;
             }
@@ -216,5 +246,20 @@ public class Solver {
 
     private ArrayList<Double> getBestGlobalPosition() {
         return getBestGlobalPosition(particles);
+    }
+    
+    private void printBestParticle() {
+    	double bestFitness = Double.MAX_VALUE;
+    	int bestI = -1;
+    	for (int i = 0; i < particles.size(); i++) {
+    		if (fitness.get(particles.get(i).getBestParticlePosition()) < bestFitness) {
+    			bestFitness =  fitness.get(particles.get(i).getBestParticlePosition());
+    			bestI = i;
+    		}
+    	}
+    	
+    	System.out.println("================");
+    	particles.get(bestI).print(bestI);
+    	System.out.println("================");
     }
 }

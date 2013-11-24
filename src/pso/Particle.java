@@ -14,6 +14,7 @@ public class Particle {
 	private static double c2;
 	private static double w;
 	private static FitnessFunction fitness;
+	
 
 	/**
 	 * Be sure to set bestGlobalPosition after this call before updating
@@ -74,10 +75,12 @@ public class Particle {
 	 * updateVelocity first!
 	 */
 	public void updatePosition() {
+		updateVelocity();
 		position = sumLists(position, velocity);
 		position = fitness.clampPosition(position, velocity);
 
-		if (fitness.get(position) < fitness.get(bestParticlePosition)) {
+		if (Math.abs(fitness.get(position)) < Math.abs(fitness
+				.get(bestParticlePosition))) {
 			bestParticlePosition = position;
 		}
 	}
@@ -90,36 +93,19 @@ public class Particle {
 		double r1 = fitness.getRandomNumber(0, 1);
 		double r2 = fitness.getRandomNumber(0, 1);
 
-		if (1 == 0) { // old version
-			ArrayList<Double> pTxT = subtractLists(bestParticlePosition,
-					position);
-			ArrayList<Double> gTxT = subtractLists(bestGlobalPosition, position);
+		ArrayList<Double> pTxT = subtractLists(bestParticlePosition, position);
+		ArrayList<Double> gTxT = subtractLists(bestGlobalPosition, position);
 
-			ArrayList<Double> c1r1pTxT = multiplyList(c1 * r1, pTxT);
-			ArrayList<Double> c2r2pTxT = multiplyList(c2 * r2, gTxT);
+		ArrayList<Double> c1r1pTxT = multiplyList(c1 * r1, pTxT);
+		ArrayList<Double> c2r2pTxT = multiplyList(c2 * r2, gTxT);
 
-			ArrayList<Double> vTc1r1pTxT = sumLists(velocity, c1r1pTxT);
-			ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT,
-					c2r2pTxT);
+		ArrayList<Double> wv = multiplyList(w, velocity);
 
-			velocity = multiplyList(w, vTc1r1pTxTc2r2pTxT);
-		} else {
-			ArrayList<Double> pTxT = subtractLists(bestParticlePosition,
-					position);
-			ArrayList<Double> gTxT = subtractLists(bestGlobalPosition, position);
+		ArrayList<Double> vTc1r1pTxT = sumLists(wv, c1r1pTxT);
+		ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT, c2r2pTxT);
 
-			ArrayList<Double> c1r1pTxT = multiplyList(c1 * r1, pTxT);
-			ArrayList<Double> c2r2pTxT = multiplyList(c2 * r2, gTxT);
-			
-			ArrayList<Double> wv = multiplyList(w, velocity);
+		velocity = vTc1r1pTxTc2r2pTxT;
 
-			ArrayList<Double> vTc1r1pTxT = sumLists(wv, c1r1pTxT);
-			ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT,
-					c2r2pTxT);
-
-			velocity = vTc1r1pTxTc2r2pTxT;
-
-		}
 		velocity = fitness.clampVelocity(velocity);
 	}
 
@@ -221,5 +207,11 @@ public class Particle {
 	// DEBUG
 	public void printPosition() {
 		System.out.println(position);
+	}
+	public void setPosition(ArrayList<Double> arg) {
+		position = arg;
+	}
+	public void setVelocity(ArrayList<Double> arg) {
+		velocity = arg;
 	}
 }
