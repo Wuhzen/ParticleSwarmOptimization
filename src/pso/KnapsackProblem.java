@@ -75,7 +75,7 @@ public class KnapsackProblem extends Problem {
 
         if (((weightLimit - knapsackQuality(vector, Package.PackageAttributes.WEIGHT)) < 0.0)
                 || ((volumeLimit != -1)
-                && ((volumeLimit - knapsackQuality(vector, Package.PackageAttributes.VALUE)) < 0.0))) {
+                && ((volumeLimit - knapsackQuality(vector, Package.PackageAttributes.VOLUME)) < 0.0))) {
             fitness = Double.MAX_VALUE;
         } else {
             fitness = maxValue - knapsackQuality(vector, Package.PackageAttributes.VALUE);

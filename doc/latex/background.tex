@@ -1,0 +1,17 @@
+\section{Background}
+The success rate of the standard Particle Swarm Optimization algorithm is mainly influenced by its parameters -- number of particles used, local attraction coefficient, global attraction coefficient to list the most important. Therefore it is crucial to choose the "right" values which would result in higher success rate. In the next paragraphs it will be explained why and which parameters were chosen for this project.
+
+\subsection{Parameters}
+
+\paragraph{Number of particles} Number of particles $N$ was chosen using following equation:
+
+\begin{equation}
+N = 10 + 2*\sqrt{D},
+\end{equation}
+
+where $D$ is dimension of the search space.
+
+\paragraph{Local and global attraction coefficient}
+It was empirically found that values close to $2.0$ give the best results. Given the limitations given by the assignment the value $1.999$ was chosen for both local and global attraction.
+
+\subsection{Fitness function}

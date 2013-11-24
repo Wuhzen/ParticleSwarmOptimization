@@ -52,9 +52,9 @@ public abstract class Solver {
     }
 
     public int solve() throws FileNotFoundException, UnsupportedEncodingException {       
-//        System.out.println("#c1 = " + c1 + ", c2 = " + c2);
-//        System.out.println("#particles = " + particles.size());        
-//        System.out.println("#step bestFitnessFunction");                        
+        System.out.println("#c1 = " + c1 + ", c2 = " + c2);
+        System.out.println("#particles = " + particles.size());        
+        System.out.println("#step bestFitnessFunction");                        
 
         for (step = 0; step < maxIterations; step++) {
             doStep();
@@ -79,8 +79,8 @@ public abstract class Solver {
 
         updateParticles();
 
-//        System.out.println((step + 1) + " "
-//                + problem.get(getBestGlobalPosition()));                
+        System.out.println((step + 1) + " "
+                + problem.get(getBestGlobalPosition()));                
     }
 
     // DEBUG
