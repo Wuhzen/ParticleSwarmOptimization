@@ -56,10 +56,10 @@ public class ParticleSwarmOptimization {
                     config.c2, config.weightLimit, config.volumeLimit, 
                     config.knapsackInputFile).solve();	
         } else {
-        	new CircleSolver(ff, config.maxIterations, config.dimension, config.epsilon,
-                    config.inertiaWeightStart,
-                    config.inertiaWeightEnd, config.connections, config.c1,
-                    config.c2).solve();
+//        	new CircleSolver(ff, config.maxIterations, config.dimension, config.epsilon,
+//                    config.inertiaWeightStart,
+//                    config.inertiaWeightEnd, config.connections, config.c1,
+//                    config.c2).solve();
         }
         
     }

@@ -14,8 +14,14 @@ public class Package {
         VALUE, WEIGHT, VOLUME;
     }
     
+    public Package(double value, double weight) {
+        this.value  = value;
+        this.weight = weight;
+        this.volume = 0.0;
+    }        
+    
     public Package(double value, double weight, double volume) {
-        this.value = value;
+        this.value  = value;
         this.weight = weight;
         this.volume = volume;
     }        

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils.Comparison;
-import pso.Package.PackageAttributes;
-
 public abstract class Solver {
 
 	protected Problem problem;
