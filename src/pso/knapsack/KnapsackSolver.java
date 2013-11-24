@@ -32,7 +32,8 @@ public class KnapsackSolver extends Solver {
 
         problem.setMaxvalue();
 
-        int particleCount = 10 + (int) (10 * Math.sqrt(dimension));
+        int particleCount = 10 + (int) (2 * Math.sqrt(dimension));
+//        int particleCount = 1000;
         particles.ensureCapacity(particleCount);
         for (int i = 0; i < particleCount; i++) {
             particles.add(new Particle(dimension));
