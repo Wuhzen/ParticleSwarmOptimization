@@ -51,7 +51,7 @@ public abstract class Solver {
     public int solve() throws FileNotFoundException, UnsupportedEncodingException {
 
         // DOCU PURPOSES - DELETE LATYER!!!
-        writer = new PrintWriter("out/task3b-3.dat", "UTF-8");
+        writer = new PrintWriter("plots/task3c-3.dat", "UTF-8");
 
         System.out.println("#c1 = " + c1 + ", c2 = " + c2);
         System.out.println("#particles = " + particles.size());        
