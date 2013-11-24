@@ -47,7 +47,6 @@ public class KnapsackSolver extends Solver {
 
 		problem.setMaxvalue();
 
-		
 		int particleCount = 10 + (int) (2 * Math.sqrt(dimension));
 		particles.ensureCapacity(particleCount);
 		for (int i = 0; i < particleCount; i++) {
@@ -71,6 +70,10 @@ public class KnapsackSolver extends Solver {
 		System.out.println("#weight = "
 				+ ((KnapsackProblem) problem).knapsackQuality(
 						getBestGlobalPosition(), PackageAttributes.WEIGHT));
+		if (volumeLimit != -1)
+			System.out.println("#volume = "
+					+ ((KnapsackProblem) problem).knapsackQuality(
+							getBestGlobalPosition(), PackageAttributes.VOLUME));
 		return retval;
 	}
 }

@@ -45,6 +45,7 @@ public class Particle {
 		velocity = new ArrayList<>();
 		for (int i = 0; i < dimension; i++) // starting velocity is zero
 		{
+			//velocity.add(Problem.getRandomNumber(-4, 4));
 			velocity.add(0.0);
 		}
 
@@ -115,14 +116,19 @@ public class Particle {
 		ArrayList<Double> c2r2pTxT = multiplyList(c2 * r2, gTxT);
 
 		ArrayList<Double> wv = multiplyList(w, velocity);
-
 		ArrayList<Double> vTc1r1pTxT = sumLists(wv, c1r1pTxT);
 		ArrayList<Double> vTc1r1pTxTc2r2pTxT = sumLists(vTc1r1pTxT, c2r2pTxT);
 
-		velocity = vTc1r1pTxTc2r2pTxT;
+		velocity = new ArrayList<Double>(vTc1r1pTxTc2r2pTxT);
 		velocity = fitness.clampVelocity(velocity);
 	}
 
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return [a_1 - b_1, a_2 - b_2, ...]
+	 */
 	public static ArrayList<Double> subtractLists(final ArrayList<Double> a,
 			final ArrayList<Double> b) {
 		ArrayList<Double> retval = new ArrayList<Double>();
@@ -135,6 +141,12 @@ public class Particle {
 		return retval;
 	}
 
+	/**
+	 * 
+	 * @param a
+	 * @param b
+	 * @return [a_1 + b_1, a_2 + b2, ...]
+	 */
 	public static ArrayList<Double> sumLists(final ArrayList<Double> a,
 			final ArrayList<Double> b) {
 		ArrayList<Double> retval = new ArrayList<Double>();
@@ -147,6 +159,11 @@ public class Particle {
 		return retval;
 	}
 
+	/**
+	 * @param c
+	 * @param list
+	 * @return c*list_i for all i
+	 */
 	public static ArrayList<Double> multiplyList(final double c,
 			final ArrayList<Double> list) {
 		ArrayList<Double> retval = new ArrayList<Double>();

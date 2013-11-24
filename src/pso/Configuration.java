@@ -39,6 +39,11 @@ public class Configuration {
         setValues(defaultProps);
     }
 
+    /**
+     * Sets all values from configuration file
+     * @param defaultProps
+     * @throws NoSuchFieldException
+     */
     private void setValues(Properties defaultProps) throws NoSuchFieldException {
         problem = parseString("problem");
         dimension = parseInt("dimension");
@@ -58,6 +63,12 @@ public class Configuration {
         }
     }
 
+    /**
+     * Parse string or yields exception.
+     * @param key
+     * @return
+     * @throws NoSuchFieldException
+     */
     private String parseString(String key) throws NoSuchFieldException {
         String value = defaultProps.getProperty(key);
         if (value == null) {
@@ -66,6 +77,12 @@ public class Configuration {
         return value;
     }
 
+    /**
+     * Parse integer or yields exception.
+     * @param key
+     * @return
+     * @throws NoSuchFieldException
+     */
     private int parseInt(String key) throws NoSuchFieldException {
         String value = defaultProps.getProperty(key);
         if (value == null) {
@@ -74,6 +91,12 @@ public class Configuration {
         return Integer.parseInt(value);
     }
 
+    /**
+     * Parse double or yields exception.
+     * @param key
+     * @return
+     * @throws NoSuchFieldException
+     */
     private double parseDouble(String key) throws NoSuchFieldException {
         String value = defaultProps.getProperty(key);
         if (value == null) {
