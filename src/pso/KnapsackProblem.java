@@ -231,7 +231,7 @@ public class KnapsackProblem extends Problem {
      * @return
      */
     private double sigmoid(double arg) {
-        return 1 / (1 + Math.exp(-arg));
+    	return 1 / (1 + Math.exp(-arg));
     }
 
     /**

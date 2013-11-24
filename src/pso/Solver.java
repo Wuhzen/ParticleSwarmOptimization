@@ -62,8 +62,7 @@ public abstract class Solver {
             }
         }
 
-        System.out.println("#Solution not found");
-        
+        System.out.println("#Solution not found");        
         return maxIterations;
     }
 
@@ -94,7 +93,6 @@ public abstract class Solver {
 
     private void updateParticlesInertia() {
         Particle.setW(Particle.getW() - inertiaStep);
-
     }
 
     protected void updateBestGlobalPosition(int connections) {
@@ -186,7 +184,7 @@ public abstract class Solver {
         return retval;
     }
 
-    private ArrayList<Double> getBestGlobalPosition() {
+    protected ArrayList<Double> getBestGlobalPosition() {
         return getBestGlobalPosition(particles);
     }
 }

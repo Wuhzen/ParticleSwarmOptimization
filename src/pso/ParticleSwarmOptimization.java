@@ -30,6 +30,8 @@ public class ParticleSwarmOptimization {
     
     /**
      * @param args the command line arguments
+     * @throws UnsupportedEncodingException 
+     * @throws FileNotFoundException 
      */
     public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
         if (args.length != 1) { //
