@@ -7,216 +7,190 @@
 package pso;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import pso.Package.PackageAttributes;
-
-import com.sun.xml.internal.ws.policy.spi.PolicyAssertionValidator.Fitness;
-
-/**
- * Abstract PSO solver.
- */
 public abstract class Solver {
 
-	protected Problem problem;
-	protected int maxIterations;
-	protected int dimension;
-	protected double epsilon;
-	protected int rounds;
-	protected double inertiaWeightEnd;
-	protected double inertiaWeightStart;
-	protected int connections;
-	protected ArrayList<Particle> particles = new ArrayList<>();
-	protected double c2;
-	protected double c1;
-	protected int step;
-	protected double inertiaStep;
+    protected Problem problem;
+    protected int maxIterations;
+    protected int dimension;
+    protected double epsilon;
+    protected int rounds;
+    protected double inertiaWeightEnd;
+    protected double inertiaWeightStart;
+    protected int connections;
+    protected ArrayList<Particle> particles = new ArrayList<>();
+    protected double c2;
+    protected double c1;
+    protected int step;
+    protected double inertiaStep;
+    
+    public Solver(Problem problem, int maxIterations, int dimension,
+            double epsilon, double inertiaWeightStart, double inertiaWeightEnd,
+            int connections, double c1, double c2) {
+        this.problem = problem;
+        this.maxIterations = maxIterations;
+        this.dimension = dimension;
+        this.epsilon = epsilon;
+        this.inertiaWeightStart = inertiaWeightStart;
+        this.inertiaWeightEnd = inertiaWeightEnd;
+        this.inertiaStep = (inertiaWeightStart - inertiaWeightEnd)
+                / maxIterations;
+        this.connections = connections;
+        this.c1 = c1;
+        this.c2 = c2;
 
-	private PrintWriter writer;
+        Particle.setC1(c1);
+        Particle.setC2(c2);
+        Particle.setW(inertiaWeightStart);
+        Particle.setFitness(problem);
+        this.particles = new ArrayList<>();
 
-	public Solver(Problem problem, int maxIterations, int dimension,
-			double epsilon, double inertiaWeightStart, double inertiaWeightEnd,
-			int connections, double c1, double c2) {
-		this.problem = problem;
-		this.maxIterations = maxIterations;
-		this.dimension = dimension;
-		this.epsilon = epsilon;
-		this.inertiaWeightStart = inertiaWeightStart;
-		this.inertiaWeightEnd = inertiaWeightEnd;
-		this.inertiaStep = (inertiaWeightStart - inertiaWeightEnd)
-				/ maxIterations;
-		this.connections = connections;
-		this.c1 = c1;
-		this.c2 = c2;
+    }
 
-		Particle.setC1(c1);
-		Particle.setC2(c2);
-		Particle.setW(inertiaWeightStart);
-		Particle.setFitness(problem);
-		this.particles = new ArrayList<>();
+    public int solve() throws FileNotFoundException, UnsupportedEncodingException {       
+//        System.out.println("#c1 = " + c1 + ", c2 = " + c2);
+//        System.out.println("#particles = " + particles.size());        
+//        System.out.println("#step bestFitnessFunction");                        
 
-	}
+        for (step = 0; step < maxIterations; step++) {
+            doStep();
 
-	public int solve() throws FileNotFoundException,
-			UnsupportedEncodingException {
+            double fitnessValue = problem.get(getBestGlobalPosition());
+            if (fitnessValue < epsilon) {
+                System.out.println("#Found solution in step " + (step + 1)
+                        + " with fitness function " + fitnessValue);                                
+                
+                return step + 1;
+            }
+        }
 
-		// DOCU PURPOSES - DELETE LATYER!!!
-		writer = new PrintWriter("plots/task3c-3.dat", "UTF-8");
+        System.out.println("#Solution not found");        
+        return maxIterations;
+    }
 
-		System.out.println("#c1 = " + c1 + ", c2 = " + c2);
-		System.out.println("#particles = " + particles.size());
-		System.out.println("#step bestFitnessFunction");
+    private void doStep() {
+        // DEBUG
+        // printParticles();
+        // printParticlesData();
 
-		writer.println("#c1 = " + c1 + ", c2 = " + c2);
-		writer.println("#particles = " + particles.size());
-		writer.println("#step bestFitnessFunction");
+        updateParticles();
 
-		for (step = 0; step < maxIterations; step++) {
-			doStep();
+        System.out.println((step + 1) + " "
+                + problem.get(getBestGlobalPosition()));                
+    }
 
-			double fitnessValue = problem.get(getBestGlobalPosition());
-			if (fitnessValue < epsilon) {
-				System.out.println("#Found solution in step " + (step + 1)
-						+ " with fitness function " + fitnessValue);
+    // DEBUG
+    private void printParticles() {
+        System.out.println("===================");
+        printParticlesData();
+        System.out.println("===================");
+    }
 
-				writer.println("#Found solution in step " + (step + 1)
-						+ " with fitness function " + fitnessValue);
+    private void updateParticles() {
+        updateParticlesVelocity();
+        updateParticlesPosition();
+        updateParticlesInertia();
+        updateBestGlobalPosition(connections);
+    }
 
-				// System.out.println("#Best solution is "
-				// + getBestGlobalPosition());
-				return step + 1;
-			}
-		}
+    private void updateParticlesInertia() {
+        Particle.setW(Particle.getW() - inertiaStep);
+    }
 
-		System.out.println("#Solution not found");
-		writer.println("#Solution not found");
+    protected void updateBestGlobalPosition(int connections) {
+        if (connections == -1) {
+            setBestGlobalPositionToAllParticles(getBestGlobalPosition());
+        } else {
+            for (Particle p : particles) {
+                // pick closest neighbours
+                ArrayList<Particle> possibleNeighbours = new ArrayList<>(
+                        particles);
+                Collections.sort(possibleNeighbours,
+                        new ParticleDistanceComparator(p));
+                // pick connections + 1 closest particles (+1 because the
+                // examined particle is also in the list
+                possibleNeighbours = new ArrayList<>(
+                        possibleNeighbours.subList(0, connections + 1));
+                p.setBestGlobalPosition(getBestGlobalPosition(possibleNeighbours));
+            }
+        }
+    }
 
-		writer.close();
+    class ParticleDistanceComparator implements Comparator<Particle> {
 
-		return maxIterations;
-	}
+        Particle particle;
 
-	private void doStep() {
-		updateParticles();
+        public ParticleDistanceComparator(Particle p) {
+            particle = p;
+        }
 
-		System.out.println((step + 1) + " "
-				+ problem.get(getBestGlobalPosition()));
+        private double getDistance(Particle p) {
+            double distance = 0;
+            for (int i = 0; i < particle.getPosition().size(); i++) {
+                distance += Math.pow(particle.getPosition().get(i)
+                        - p.getPosition().get(i), 2);
+            }
+            return Math.sqrt(distance);
+        }
 
-		writer.println((step + 1) + " " + problem.get(getBestGlobalPosition()));
-	}
+        @Override
+        public int compare(Particle o1, Particle o2) {
+            double o1distance = getDistance(o1);
+            double o2distance = getDistance(o2);
+            return Double.compare(o1distance, o2distance);
+        }
+    }
 
-	// DEBUG
-	private void printParticles() {
-		System.out.println("===================");
-		printParticlesData();
-		System.out.println("===================");
-	}
+    private void printParticlesData() {
+        for (int i = 0; i < particles.size(); i++) {
+            if (i == 1) {
+                particles.get(i).print(i);
+            }
+        }
+    }
 
-	private void updateParticles() {
-		updateParticlesVelocity();
-		updateParticlesPosition();
-		updateParticlesInertia();
-		updateBestGlobalPosition(connections);
-	}
+    private void updateParticlesPosition() {
+        for (Particle particle : particles) {
+            particle.updatePosition();
+        }
+    }
 
-	private void updateParticlesInertia() {
-		Particle.setW(Particle.getW() - inertiaStep);
-	}
+    private void updateParticlesVelocity() {
+        for (Particle particle : particles) {
+            particle.updateVelocity();
+        }
+    }
 
-	protected void updateBestGlobalPosition(int connections) {
-		if (connections == -1) {
-			setBestGlobalPositionToAllParticles(getBestGlobalPosition());
-		} else {
-			for (Particle p : particles) {
-				// pick closest neighbours
-				ArrayList<Particle> possibleNeighbours = new ArrayList<>(
-						particles);
-				Collections.sort(possibleNeighbours,
-						new ParticleDistanceComparator(p));
-				// pick connections + 1 closest particles (+1 because the
-				// examined particle is also in the list
-				possibleNeighbours = new ArrayList<>(
-						possibleNeighbours.subList(0, connections + 1));
-				p.setBestGlobalPosition(getBestGlobalPosition(possibleNeighbours));
-			}
-		}
-	}
+    private void setBestGlobalPositionToAllParticles(ArrayList<Double> pos) {
+        for (Particle p : particles) {
+            p.setBestGlobalPosition(pos);
+        }
+    }
 
-	class ParticleDistanceComparator implements Comparator<Particle> {
+    private ArrayList<Double> getBestGlobalPosition(
+            ArrayList<Particle> particles) {
+        ArrayList<Double> retval = new ArrayList<>();
+        double best = Double.MAX_VALUE;
+        for (Particle p : particles) {
+            ArrayList<Double> position = p.getBestParticlePosition();
+            double fitnessValue = problem.get(position);
+            // DEBUG
+            // System.out.println("fitness: " + fitnessValue);
+            // System.out.println("position: " + position);
 
-		Particle particle;
+            if (fitnessValue < best) {
+                retval = new ArrayList<Double>(position);
+                best = fitnessValue;
+            }
+        }
+        return retval;
+    }
 
-		public ParticleDistanceComparator(Particle p) {
-			particle = p;
-		}
-
-		private double getDistance(Particle p) {
-			double distance = 0;
-			for (int i = 0; i < particle.getPosition().size(); i++) {
-				distance += Math.pow(particle.getPosition().get(i)
-						- p.getPosition().get(i), 2);
-			}
-			return Math.sqrt(distance);
-		}
-
-		@Override
-		public int compare(Particle o1, Particle o2) {
-			double o1distance = getDistance(o1);
-			double o2distance = getDistance(o2);
-			return Double.compare(o1distance, o2distance);
-		}
-	}
-
-	private void printParticlesData() {
-		for (int i = 0; i < particles.size(); i++) {
-			if (i == 1) {
-				particles.get(i).print(i);
-			}
-		}
-	}
-
-	private void updateParticlesPosition() {
-		for (Particle particle : particles) {
-			particle.updatePosition();
-		}
-	}
-
-	private void updateParticlesVelocity() {
-		for (Particle particle : particles) {
-			particle.updateVelocity();
-		}
-	}
-
-	private void setBestGlobalPositionToAllParticles(ArrayList<Double> pos) {
-		for (Particle p : particles) {
-			p.setBestGlobalPosition(pos);
-		}
-	}
-
-	private ArrayList<Double> getBestGlobalPosition(
-			ArrayList<Particle> particles) {
-		ArrayList<Double> retval = new ArrayList<>();
-		double best = Double.MAX_VALUE;
-		for (Particle p : particles) {
-			ArrayList<Double> position = p.getBestParticlePosition();
-			double fitnessValue = problem.get(position);
-			// DEBUG
-			// System.out.println("fitness: " + fitnessValue);
-			// System.out.println("position: " + position);
-
-			if (fitnessValue < best) {
-				retval = new ArrayList<Double>(position);
-				best = fitnessValue;
-			}
-		}
-		return retval;
-	}
-
-	protected ArrayList<Double> getBestGlobalPosition() {
-		return getBestGlobalPosition(particles);
-	}
+    protected ArrayList<Double> getBestGlobalPosition() {
+        return getBestGlobalPosition(particles);
+    }
 }
