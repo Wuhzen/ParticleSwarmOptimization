@@ -1,5 +1,5 @@
 problem              = circle
-dimension            = 5
+dimension            = 2
 max_iterations       = 1000
 epsilon              = 0.001
 connections          = -1
