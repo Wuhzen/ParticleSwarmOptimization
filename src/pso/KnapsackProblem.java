@@ -25,6 +25,7 @@ public class KnapsackProblem extends FitnessFunction {
             CommonConstants.knapsackProblemClampVelocityMax;
     private ArrayList<Package> packages;
     private double weightLimit;
+    private double volumeLimit;
     private double maxValue;
     private double dimension;
 
@@ -43,6 +44,10 @@ public class KnapsackProblem extends FitnessFunction {
         this.weightLimit = weightLimit;
     }
 
+    public void setVolumeLimit(double volumeLimit) {
+        this.volumeLimit = volumeLimit;
+    }
+    
     /**
      * Counts the total value of all packages and saves it
      */
@@ -87,7 +92,7 @@ public class KnapsackProblem extends FitnessFunction {
      *
      * @param path Path to the file
      */
-    void parsePackagesFile(String path, boolean considerVolume) {
+    void parsePackagesFile(String path) {
         File f;
         Scanner scanner = null;
 
@@ -100,7 +105,7 @@ public class KnapsackProblem extends FitnessFunction {
             }
 
             for(int i = 0; i < dimension; i++) {
-                processLine(scanner.next(), considerVolume);
+                processLine(scanner.next());
             }            
         } catch (NullPointerException e) {
             System.err.println("ERROR: No file specified.\n");
@@ -128,8 +133,8 @@ public class KnapsackProblem extends FitnessFunction {
      *
      * @param line
      */
-    void processLine(String line, boolean considerVolume) {
-        double value, weight, volume = 0.0;
+    void processLine(String line) {
+        double value, weight;
 
         Scanner scanner = new Scanner(line);
         scanner.useDelimiter(",");
@@ -138,11 +143,7 @@ public class KnapsackProblem extends FitnessFunction {
             value = scanner.nextDouble();
             weight = scanner.nextDouble();
 
-            if (considerVolume) {
-                volume = scanner.nextDouble();
-            }
-
-            packages.add(new Package(value, weight, volume));
+            packages.add(new Package(value, weight));
         } catch (NoSuchElementException e) {
             System.err.println("ERROR: Wrong file content");
             throw e;
@@ -245,6 +246,10 @@ public class KnapsackProblem extends FitnessFunction {
             sum += position.get(i) * packages.get(i).get(a);
         }
         return sum;
+    }
+    
+    public void generateRandomValues(double min, double max) {
+        
     }
 }
 /**

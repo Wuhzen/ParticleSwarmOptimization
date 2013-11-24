@@ -10,4 +10,6 @@ public class CommonConstants {
     public static final double knapsackProblemParticlePositionMax = +1.0;   // not used
     public static final double knapsackProblemClampVelocityMin = -4.25;
     public static final double knapsackProblemClampVelocityMax = +4.25;
+    public static final double knapsackProblemPackageVolumeMin = 1;
+    public static final double knapsackProblemPackageVolumeMax = 100;
 }

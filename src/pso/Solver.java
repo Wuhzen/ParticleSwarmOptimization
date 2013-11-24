@@ -43,16 +43,19 @@ public class Solver {
         this.volumeLimit = volumeLimit;
 
         // In case of knapsack problem parse the input packages file
-        if (fitness instanceof KnapsackProblem) {
-            ((KnapsackProblem) fitness).setDimension(dimension);
-
-            boolean considerVolume = (volumeLimit == -1) ? false : true;
-            ((KnapsackProblem) fitness).parsePackagesFile(knapsackInputFile,
-                    considerVolume);
-
-            // terrible hacks which I am ashamed for but no time to
-            // change factory pattern.
+        if(fitness instanceof KnapsackProblem) {
+            ((KnapsackProblem) fitness).setDimension(dimension);          
             ((KnapsackProblem) fitness).setWeightLimit(weightLimit);
+            ((KnapsackProblem) fitness).setVolumeLimit(volumeLimit);
+            
+            // if volume considered generate random volumes for packages
+            if(volumeLimit != -1) {
+                ((KnapsackProblem) fitness).generateRandomValues(
+                        CommonConstants.knapsackProblemPackageVolumeMin,
+                        CommonConstants.knapsackProblemPackageVolumeMax);
+            }
+            
+            ((KnapsackProblem) fitness).parsePackagesFile(knapsackInputFile);                                
             ((KnapsackProblem) fitness).setMaxvalue();
         }
 
