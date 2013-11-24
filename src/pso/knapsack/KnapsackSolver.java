@@ -21,7 +21,7 @@ public class KnapsackSolver extends Solver {
 		boolean considerVolume = (volumeLimit == -1) ? false : true;
 		problem.parsePackagesFile(knapsackInputFile,
 				considerVolume);
-
+		
 		problem.setWeightLimit(weightLimit);
 		problem.setMaxvalue();
 		

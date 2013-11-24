@@ -180,13 +180,14 @@ public class KnapsackProblem extends Problem {
         int minFitPackages = (int) (weightLimit / maxPackageWeight);        
 
         ArrayList<Double> position = new ArrayList<>(dimension);
-        for (int i = 0; i < dimension; i++) {
+        for(int i = 0; i < dimension; i++) {
             position.add(0.0);
         }
         
-        for(int i = 0; (i < dimension) && (i < minFitPackages); i++) {                            
+        for(int i = 0; (i < dimension) && (i < minFitPackages); i++) {                                                              
             int index = (int) getRandomNumber(0, dimension - Double.MIN_VALUE);
             if (position.get(index) != 0.0) {
+                i--;
                 continue;
             }
             position.set(index, 1.0);            
@@ -201,7 +202,7 @@ public class KnapsackProblem extends Problem {
         double newPos;
         
         for(int i = 0; i < position.size(); i++) {
-        	newPos = (getRandomNumber(0.0, 1.0) < sigmoid(velocity.get(i))) ? 1.0 : 0.0;
+        	newPos = (getRandomNumber(0.0, 1.0) <= sigmoid(velocity.get(i))) ? 1.0 : 0.0;
             position.set(i, newPos);
         }
         
@@ -210,19 +211,12 @@ public class KnapsackProblem extends Problem {
     
     @Override
     public ArrayList<Double> clampVelocity(ArrayList<Double> velocity) {
-        //int sign;
-
         for (int i = 0; i < velocity.size(); i++) {
             if (velocity.get(i) < clampMin) {
                 velocity.set(i, clampMin);
             } else if (velocity.get(i) > clampMax) {
                 velocity.set(i, clampMax);
             }
-
-            // Map to range <-1, 1> using sigmoid function        
-            //sign = (velocity.get(i) > 0.0) ? 1 : -1;
-            //velocity.set(i, sign * sigmoid(velocity.get(i)));
-            //velocity.set(i, sigmoid(velocity.get(i)));
         }
 
         return velocity;
